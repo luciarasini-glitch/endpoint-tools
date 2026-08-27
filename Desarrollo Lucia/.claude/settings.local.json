@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x \"/Users/luciarasini/Documents/Endpoint Security Agent/scripts/start_dashboard.sh\")",
+      "Bash(crontab -l)",
+      "Read(//tmp/**)",
+      "Bash(crontab /tmp/current_cron.txt)",
+      "Bash(mkdir -p \"/Users/luciarasini/Documents/Endpoint Security Agent/logs\")",
+      "mcp__24282c1c-1e43-4448-b8a7-3b04de0204a7__slack_search_users",
+      "mcp__24282c1c-1e43-4448-b8a7-3b04de0204a7__slack_send_message"
+    ]
+  }
+}

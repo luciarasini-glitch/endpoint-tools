@@ -1,0 +1,79 @@
+{
+  "command_id": "6a4bb992cc1cb1b62eb102fc",
+  "command_name": "Cloudflare install",
+  "command_type": "mac",
+  "target_platform": "macOS",
+  "started_at_utc": "2026-07-14T12:09:58.275756+00:00",
+  "csv_path": "reports/jumpcloud_targets_6a4bb992cc1cb1b62eb102fc_20260714.csv",
+  "requested_count": 5,
+  "executed_count": 5,
+  "http_status": 200,
+  "run_response": {
+    "queueIds": [
+      "6a562716e8109b04a7dcf4d2",
+      "6a562716e8109b04a7dcf4d4",
+      "6a562716e8109b04a7dcf4d6",
+      "6a562716e8109b04a7dcf4d8",
+      "6a562716e8109b04a7dcf4da"
+    ],
+    "workflowInstanceId": "6a562716e8109b04a7dcf4cf"
+  },
+  "systems": [
+    {
+      "requested_hostname": "CASHEA-MAC-FVFD9FF4CN",
+      "system_id": "6a18702c5a4b5112ff0e83ca",
+      "display_name": "CASHEA-MAC-FVFD9FF4CN",
+      "hostname": "CASHEA-MAC-FVFD9FF4CN",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-07-13T21:57:03.000Z",
+      "agent_version": "2.142.5"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-GK9L1F9J7X",
+      "system_id": "68d72cf64bc879644ac46e60",
+      "display_name": "CASHEA-MAC-GK9L1F9J7X",
+      "hostname": "CASHEA-MAC-GK9L1F9J7X",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-07-13T19:26:47.747Z",
+      "agent_version": "2.142.5"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-JKQ37M6KHH",
+      "system_id": "69dfdb832716752c755877b5",
+      "display_name": "CASHEA-MAC-JKQ37M6KHH",
+      "hostname": "CASHEA-MAC-JKQ37M6KHH",
+      "os": "Mac OS X",
+      "active": true,
+      "last_contact": "2026-07-14T12:04:51.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-C30G4XKMX0",
+      "system_id": "68ed03c28a858be7ca370391",
+      "display_name": "CASHEA-MAC-C30G4XKMX0",
+      "hostname": "CASHEA-MAC-C30G4XKMX0",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-07-14T11:27:03.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-KHKQDP2FN0",
+      "system_id": "6a4ecdfeda6ab871d7ddeab6",
+      "display_name": "CASHEA-MAC-KHKQDP2FN0",
+      "hostname": "CASHEA-MAC-KHKQDP2FN0",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-07-12T20:40:22.000Z",
+      "agent_version": "2.144.2"
+    }
+  ],
+  "skipped": {
+    "missing": [],
+    "duplicates": [],
+    "nonwindows": [],
+    "platform_mismatches": []
+  }
+}

@@ -1,0 +1,205 @@
+name: 🔨 Scaffold new repository
+
+# Cuándo se ejecuta:
+# - Por ahora SOLO manualmente (workflow_dispatch) — mientras dura el bootstrap.
+#   El body del job depende de `github.event.issue.*` (label name, issue number, body
+#   parser), así que un dispatch manual no hace nada útil tal cual está. Sirve solo
+#   para que el workflow no se dispare solo y falle por falta de secrets / templates.
+#
+#   TODO[DevOps]: una vez configurada la GitHub App + secrets + templates + teams,
+#   restaurar el trigger original:
+#     on:
+#       issues:
+#         types: [labeled]
+#
+# Qué hace cuando está activo:
+# 1. Parsea los campos del Issue (nombre, team, clasificación, stack, etc.)
+# 2. Crea el repo nuevo desde el template correcto vía GitHub App
+# 3. Inyecta los rules de seguridad en .claude/rules/
+# 4. Configura CODEOWNERS para que AppSec apruebe cambios críticos
+# 5. Asigna el equipo dueño con permisos write
+# 6. Comenta en el Issue con el link al repo nuevo y cierra el Issue
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  scaffold:
+    # Solo corre si:
+    # - El label que se agregó es "approved"
+    # - El Issue tiene uno de los labels de "nuevo X"
+    if: |
+      github.event.label.name == 'approved' &&
+      (contains(github.event.issue.labels.*.name, 'new-service') ||
+       contains(github.event.issue.labels.*.name, 'new-backoffice') ||
+       contains(github.event.issue.labels.*.name, 'new-frontend-package'))
+    runs-on: ubuntu-latest
+
+    steps:
+      # ────────────────────────────────────────────────────────────────
+      # 1. Generar token de la GitHub App
+      # ────────────────────────────────────────────────────────────────
+      # TODO[DevOps]: configurar estos secrets antes de habilitar este workflow:
+      #   - FORGE_APP_ID: ID de la GitHub App "Cashea AI Forge"
+      #   - FORGE_APP_PRIVATE_KEY: private key de la App
+      # La GitHub App necesita estos permisos:
+      #   - Repository: Contents (write), Administration (write), Metadata (read)
+      #   - Organization: Members (write), Administration (read)
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FORGE_APP_ID }}
+          private-key: ${{ secrets.FORGE_APP_PRIVATE_KEY }}
+          owner: cashea
+
+      # ────────────────────────────────────────────────────────────────
+      # 2. Checkout de ai-forge (para tener acceso a rules/ y scaffolding/)
+      # ────────────────────────────────────────────────────────────────
+      - name: Checkout ai-forge
+        uses: actions/checkout@v4
+
+      # ────────────────────────────────────────────────────────────────
+      # 3. Parsear el Issue
+      # ────────────────────────────────────────────────────────────────
+      - name: Parse issue
+        id: parse
+        uses: stefanbuck/github-issue-parser@v3
+        with:
+          template-path: |
+            ${{ contains(github.event.issue.labels.*.name, 'new-service') && '.github/ISSUE_TEMPLATE/new-service.yml' || '' }}
+            ${{ contains(github.event.issue.labels.*.name, 'new-backoffice') && '.github/ISSUE_TEMPLATE/new-backoffice.yml' || '' }}
+            ${{ contains(github.event.issue.labels.*.name, 'new-frontend-package') && '.github/ISSUE_TEMPLATE/new-frontend-package.yml' || '' }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 4. Determinar template source y nombre del repo nuevo
+      # ────────────────────────────────────────────────────────────────
+      - name: Determine source template and target repo
+        id: target
+        run: |
+          set -euo pipefail
+
+          if echo '${{ toJson(github.event.issue.labels) }}' | grep -q '"new-backoffice"'; then
+            echo "template=bo-template" >> "$GITHUB_OUTPUT"
+            echo "name=${{ steps.parse.outputs.issueparser_bo-name }}" >> "$GITHUB_OUTPUT"
+            echo "type=backoffice" >> "$GITHUB_OUTPUT"
+          elif echo '${{ toJson(github.event.issue.labels) }}' | grep -q '"new-service"'; then
+            echo "template=ms-template" >> "$GITHUB_OUTPUT"
+            echo "name=${{ steps.parse.outputs.issueparser_service-name }}" >> "$GITHUB_OUTPUT"
+            echo "type=microservice" >> "$GITHUB_OUTPUT"
+          else
+            echo "template=web-platform" >> "$GITHUB_OUTPUT"
+            echo "name=${{ steps.parse.outputs.issueparser_package-name }}" >> "$GITHUB_OUTPUT"
+            echo "type=frontend-package" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ────────────────────────────────────────────────────────────────
+      # 5. Validar nombre del repo
+      # ────────────────────────────────────────────────────────────────
+      - name: Validate repo name
+        run: |
+          set -euo pipefail
+          NAME="${{ steps.target.outputs.name }}"
+
+          # Lowercase, alphanumeric + guiones, max 50 chars
+          if ! echo "$NAME" | grep -Eq '^[a-z][a-z0-9-]{2,49}$'; then
+            echo "::error::Nombre de repo inválido: '$NAME'. Debe ser lowercase, empezar con letra, max 50 chars."
+            exit 1
+          fi
+
+          # Verificar que no exista
+          if gh repo view "cashea-bnpl/$NAME" >/dev/null 2>&1; then
+            echo "::error::Repo cashea-bnpl/$NAME ya existe."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 6. Crear el repo desde el template
+      # ────────────────────────────────────────────────────────────────
+      - name: Create repo from template
+        id: create
+        run: |
+          set -euo pipefail
+          NAME="${{ steps.target.outputs.name }}"
+          TEMPLATE="${{ steps.target.outputs.template }}"
+
+          gh repo create "cashea-bnpl/$NAME" \
+            --template "cashea-bnpl/$TEMPLATE" \
+            --private \
+            --description "Created from $TEMPLATE via ai-forge — see Issue #${{ github.event.issue.number }}"
+
+          echo "url=https://github.com/cashea-bnpl/$NAME" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 7. Inyectar rules de seguridad
+      # ────────────────────────────────────────────────────────────────
+      - name: Inject .claude/rules/ into new repo
+        run: bash scaffolding/inject-rules.sh "cashea-bnpl/${{ steps.target.outputs.name }}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 8. Configurar permisos del equipo
+      # ────────────────────────────────────────────────────────────────
+      - name: Grant team write access
+        run: |
+          TEAM=$(echo "${{ steps.parse.outputs.issueparser_team }}" | tr '[:upper:]' '[:lower:]')
+          gh api -X PUT "/orgs/cashea-bnpl/teams/$TEAM/repos/cashea-bnpl/${{ steps.target.outputs.name }}" \
+            -f permission='push'
+
+          # AppSec siempre tiene admin
+          gh api -X PUT "/orgs/cashea-bnpl/teams/appsec/repos/cashea-bnpl/${{ steps.target.outputs.name }}" \
+            -f permission='admin'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 9. Comentar en el Issue + cerrar
+      # ────────────────────────────────────────────────────────────────
+      - name: Comment on issue and close
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "✅ **Repo creado exitosamente.**
+
+          📦 **URL:** ${{ steps.create.outputs.url }}
+          🔨 **Template:** \`${{ steps.target.outputs.template }}\`
+          📚 **Tipo:** ${{ steps.target.outputs.type }}
+
+          ## Próximos pasos
+
+          1. Cloná el repo: \`git clone ${{ steps.create.outputs.url }}.git\`
+          2. Revisá el README del repo para los pasos de configuración local
+          3. Los rules de seguridad ya están en \`.claude/rules/\` — Claude Code los va a cargar automáticamente
+
+          ## Recordá
+
+          - 🔒 Los cambios en archivos críticos requieren approval de AppSec (configurado vía CODEOWNERS)
+          - 🛡️ GHAS está activo: CodeQL + Dependabot + Secret Scanning
+          - 📖 Si tenés dudas, Slack #appsec o mail a security@cashea.app
+
+          Cerrando este Issue. Si encontrás algún problema con el repo, abrí uno nuevo."
+
+          gh issue close ${{ github.event.issue.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ────────────────────────────────────────────────────────────────
+      # 10. Si algo falla: comentar y NO cerrar
+      # ────────────────────────────────────────────────────────────────
+      - name: Comment failure
+        if: failure()
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "❌ **El scaffolding falló.**
+
+          Revisar el log del workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          AppSec va a tomarlo desde acá."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

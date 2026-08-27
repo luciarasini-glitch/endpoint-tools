@@ -1,0 +1,134 @@
+{
+  "command_id": "6a3d200ff277f325b7493781",
+  "command_name": "Troubleshooting Antivirus",
+  "command_type": "windows",
+  "target_platform": "Windows",
+  "started_at_utc": "2026-07-15T12:29:53.306186+00:00",
+  "csv_path": "reports/jumpcloud_targets_6a3d200ff277f325b7493781_20260715_092936.csv",
+  "requested_count": 10,
+  "executed_count": 10,
+  "http_status": 200,
+  "run_response": {
+    "queueIds": [
+      "6a577d41e44b0668f454f040",
+      "6a577d41e44b0668f454f042",
+      "6a577d41e44b0668f454f045",
+      "6a577d41e44b0668f454f047",
+      "6a577d41e44b0668f454f04a",
+      "6a577d41e44b0668f454f056",
+      "6a577d41e44b0668f454f058",
+      "6a577d41e44b0668f454f05b",
+      "6a577d41e44b0668f454f05d",
+      "6a577d41e44b0668f454f05f"
+    ],
+    "workflowInstanceId": "6a577d41e44b0668f454f03c"
+  },
+  "systems": [
+    {
+      "requested_hostname": "DESKTOP-HHIK7VS",
+      "system_id": "6a42f57b161d76d27c15c3b1",
+      "display_name": "DESKTOP-HHIK7VS",
+      "hostname": "DESKTOP-HHIK7VS",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-15T12:25:50.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-FTMVUPP",
+      "system_id": "6a47ea09cdcda7ebb124fa8e",
+      "display_name": "DESKTOP-FTMVUPP",
+      "hostname": "DESKTOP-FTMVUPP",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-14T20:32:55.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-GR56NQ0",
+      "system_id": "6a397e37d373c892f506afab",
+      "display_name": "DESKTOP-GR56NQ0",
+      "hostname": "DESKTOP-GR56NQ0",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-15T09:31:01.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-HDBF73J",
+      "system_id": "6a4bd0079fb4dd006d92bab9",
+      "display_name": "DESKTOP-HDBF73J",
+      "hostname": "DESKTOP-HDBF73J",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-14T19:50:32.000Z",
+      "agent_version": "2.147.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-0HKR4EI",
+      "system_id": "6a3943197a7a6cb9a98f390d",
+      "display_name": "DESKTOP-0HKR4EI",
+      "hostname": "DESKTOP-0HKR4EI",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-14T22:06:10.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-61PBL9F",
+      "system_id": "6a3599827df8126f16208531",
+      "display_name": "DESKTOP-61PBL9F",
+      "hostname": "DESKTOP-61PBL9F",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-15T12:29:34.321Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-4L4EL2S",
+      "system_id": "6a4faf91c902bd8b1836868d",
+      "display_name": "DESKTOP-4L4EL2S",
+      "hostname": "DESKTOP-4L4EL2S",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-15T02:10:47.228Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-TVC6NRC",
+      "system_id": "6a4fe1af037d8faa9c4d67e9",
+      "display_name": "DESKTOP-TVC6NRC",
+      "hostname": "DESKTOP-TVC6NRC",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-14T20:44:47.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-GR5B2J9",
+      "system_id": "6a4ff8cd9e5c8f272729a400",
+      "display_name": "DESKTOP-GR5B2J9",
+      "hostname": "DESKTOP-GR5B2J9",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-14T23:08:13.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "Tati",
+      "system_id": "6a5019264989c21f654d6d65",
+      "display_name": "Tati",
+      "hostname": "Tati",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-15T12:23:48.000Z",
+      "agent_version": "2.144.2"
+    }
+  ],
+  "skipped": {
+    "missing": [],
+    "duplicates": [],
+    "nonwindows": [],
+    "platform_mismatches": []
+  }
+}

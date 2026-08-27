@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ciberseg-tracker",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "4400", "ciberseg-tracker"],
+      "port": 4400
+    }
+  ]
+}

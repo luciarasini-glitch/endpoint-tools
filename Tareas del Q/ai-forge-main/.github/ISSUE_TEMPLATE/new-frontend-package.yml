@@ -1,0 +1,109 @@
+name: 🎨 Nuevo paquete frontend
+description: Solicitá la creación de un paquete nuevo dentro del monorepo web-platform
+title: "[NEW PACKAGE] "
+labels: ["new-frontend-package", "pending-approval"]
+projects: []
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔨 Crear un paquete frontend nuevo
+
+        Este formulario crea un paquete nuevo dentro del monorepo [`web-platform`](https://github.com/cashea-bnpl/web-platform).
+
+        **Cuándo usar este template:**
+        - Estás creando un paquete compartido (UI components, hooks, utils, configs)
+        - No es una app completa — para apps usá "Nuevo Backoffice" o "Nuevo Servicio"
+
+  - type: input
+    id: package-name
+    attributes:
+      label: Nombre del paquete
+      description: |
+        Nombre del paquete dentro del monorepo. Usa el formato `@cashea-bnpl/...`.
+        Ej: `@cashea-bnpl/ui-tables`, `@cashea-bnpl/hooks-auth`, `@cashea-bnpl/eslint-config`
+      placeholder: "@cashea-bnpl/my-package"
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: ¿Qué hace este paquete?
+      description: Qué exporta, qué problema resuelve, dónde se va a usar
+      placeholder: |
+        Tabla data-grid reutilizable con filtros, ordenamiento y paginación.
+        Va a reemplazar las tablas custom que cada backoffice está armando por su cuenta.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package-type
+    attributes:
+      label: Tipo de paquete
+      options:
+        - UI components (React)
+        - Hooks
+        - Utils / helpers
+        - Config compartida (ESLint, TS, Tailwind, etc.)
+        - Cliente de API
+        - Otro (especificar abajo)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Equipo responsable
+      options:
+        - platform
+        - engineering
+        - finance
+        - security
+        - data
+        - product
+    validations:
+      required: true
+
+  - type: textarea
+    id: api
+    attributes:
+      label: API pública preliminar
+      description: Qué va a exportar el paquete. Funciones, componentes, tipos.
+      placeholder: |
+        export const DataGrid: FC<DataGridProps>
+        export type DataGridProps = { ... }
+        export const useDataGridState: () => ...
+
+  - type: checkboxes
+    id: security-aspects
+    attributes:
+      label: Aspectos de seguridad a considerar
+      description: Si marcás alguno, hay reviews adicionales
+      options:
+        - label: Maneja inputs de usuario (riesgo XSS si no se sanitiza)
+        - label: Renderiza datos sensibles (PII-I, FIN-IND)
+        - label: Hace llamadas a APIs externas
+        - label: Maneja tokens, sesiones, o auth
+        - label: Usa dependencias de terceros nuevas
+        - label: Ninguna de las anteriores
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Contexto adicional
+      placeholder: (opcional)
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: El paquete va a tener tests y storybook
+          required: true
+        - label: La API pública va a estar tipada con TypeScript
+          required: true
+        - label: Si maneja inputs de usuario, voy a usar las utilities de sanitización del monorepo
+          required: true

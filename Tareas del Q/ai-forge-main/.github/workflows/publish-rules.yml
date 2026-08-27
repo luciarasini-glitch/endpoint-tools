@@ -1,0 +1,116 @@
+name: 📤 Publish rules to templates
+
+# Cuándo se ejecuta:
+# - Solo manualmente (workflow_dispatch) mientras dura el bootstrap.
+#   TODO[DevOps]: Una vez configurada la GitHub App + secrets + templates,
+#   reactivar el trigger automático en push a main con cambios en rules/.
+#
+# Qué hace:
+# Para cada repo target (los 3 templates + los repos que opten in):
+# 1. Clona el repo
+# 2. Copia rules/ → .claude/rules/
+# 3. Si hubo cambios, abre un PR para mergear
+#
+# Por qué un PR y no un push directo:
+# - Permite que el equipo dueño del repo revise antes de mergear
+# - Queda historial auditable
+# - GHAS chequea el cambio en CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repos:
+        description: 'Repos a actualizar (coma-separados). Vacío = todos los templates.'
+        required: false
+        default: 'bo-template,ms-template,web-platform'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+          - bo-template
+          - ms-template
+          - web-platform
+
+    steps:
+      # TODO[DevOps]: ver scaffold.yml para configurar los secrets de la App
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FORGE_APP_ID }}
+          private-key: ${{ secrets.FORGE_APP_PRIVATE_KEY }}
+          owner: cashea
+          repositories: ${{ matrix.repo }}
+
+      - name: Checkout ai-forge
+        uses: actions/checkout@v4
+        with:
+          path: ai-forge
+
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: cashea-bnpl/${{ matrix.repo }}
+          token: ${{ steps.app-token.outputs.token }}
+          path: target
+
+      - name: Copy rules to target
+        run: |
+          set -euo pipefail
+          mkdir -p target/.claude/rules
+          cp ai-forge/rules/SKILL.md target/.claude/rules/SKILL.md
+          cp -r ai-forge/rules/references/* target/.claude/rules/
+          # README inside .claude/rules/
+          cp ai-forge/scaffolding/rules-readme.md target/.claude/rules/README.md
+
+      - name: Check for changes
+        id: diff
+        working-directory: target
+        run: |
+          if [ -z "$(git status --porcelain .claude/rules)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No hay cambios en .claude/rules — skip"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create PR with updates
+        if: steps.diff.outputs.changed == 'true'
+        working-directory: target
+        run: |
+          set -euo pipefail
+          BRANCH="ai-forge/sync-rules-$(date +%Y%m%d-%H%M%S)"
+          git config user.name "Cashea AI Forge"
+          git config user.email "ai-forge@cashea.app"
+          git checkout -b "$BRANCH"
+          git add .claude/rules/
+          git commit -m "chore(security): sync security rules from ai-forge
+
+          Auto-generated PR by ai-forge publish-rules workflow.
+          Source: https://github.com/cashea-bnpl/ai-forge
+
+          Changes pulled from: $GITHUB_SHA
+          "
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "🔒 Sync security rules from ai-forge" \
+            --body "Auto-generated PR.
+
+          Updates \`.claude/rules/\` to match the latest version in [ai-forge](https://github.com/cashea-bnpl/ai-forge).
+
+          **No revisar el contenido aquí** — los cambios ya fueron aprobados por AppSec en el PR original a ai-forge.
+
+          Solo mergear si el CI pasa.
+          " \
+            --label "automated,security" \
+            --reviewer "cashea-bnpl/appsec"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}

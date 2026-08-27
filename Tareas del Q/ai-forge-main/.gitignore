@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (en caso de que se agreguen tools)
+node_modules/
+*.log
+.pnpm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Secrets — never commit
+*.pem
+*.key
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log

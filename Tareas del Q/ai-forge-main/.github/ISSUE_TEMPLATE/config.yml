@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Reportar una vulnerabilidad
+    url: mailto:security@cashea.app
+    about: NO uses Issues públicos para reportar vulnerabilidades. Mandá un mail a security@cashea.app o avisá por Slack a #appsec.
+  - name: 💬 Pregunta general sobre AppSec
+    url: https://app.slack.com/client/cashea/appsec
+    about: Slack #appsec
+  - name: 📖 Documentación de AI Security
+    url: https://www.notion.so/cashea/AI-Security
+    about: Notion → AI Security workspace

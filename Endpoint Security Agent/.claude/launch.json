@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "/Users/luciarasini/Documents/Endpoint Security Agent/.venv/bin/streamlit",
+      "runtimeArgs": ["run", "ui/dashboard.py", "--server.port", "8503", "--server.headless", "true"],
+      "port": 8503
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+name: ✅ Validate rules
+
+# Cuándo se ejecuta:
+# - Por ahora SOLO manualmente (workflow_dispatch) — mientras dura el bootstrap.
+#   TODO[DevOps]: reactivar los triggers automáticos en PR + push a main cuando
+#   el repo esté listo para CI continuo:
+#     on:
+#       pull_request:
+#         paths:
+#           - 'rules/**'
+#           - '.claude/rules/**'
+#       push:
+#         branches: [main]
+#         paths:
+#           - 'rules/**'
+#           - '.claude/rules/**'
+#
+# Qué valida:
+# - SKILL.md tiene el frontmatter YAML válido
+# - El campo `description` no supera 1024 chars (límite de Claude.ai)
+# - Los references existen y son markdown válido
+# - No hay typos comunes en YAML
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml markdown-it-py
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          python3 <<'PYEOF'
+          import re, sys, yaml
+
+          path = "rules/SKILL.md"
+          with open(path) as f:
+              content = f.read()
+
+          # Extract frontmatter
+          m = re.match(r'^---\n(.+?)\n---', content, re.DOTALL)
+          if not m:
+              print(f"::error file={path}::Falta frontmatter YAML al inicio")
+              sys.exit(1)
+
+          try:
+              fm = yaml.safe_load(m.group(1))
+          except yaml.YAMLError as e:
+              print(f"::error file={path}::YAML inválido: {e}")
+              sys.exit(1)
+
+          # Check required fields
+          for field in ("name", "description"):
+              if field not in fm:
+                  print(f"::error file={path}::Falta campo obligatorio: {field}")
+                  sys.exit(1)
+
+          # Check description length (Claude.ai limit: 1024 chars)
+          desc = fm["description"].strip().replace("\n", " ")
+          desc = " ".join(desc.split())  # normalize whitespace
+          if len(desc) > 1024:
+              print(f"::error file={path}::description tiene {len(desc)} chars, límite es 1024")
+              sys.exit(1)
+
+          print(f"✅ SKILL.md OK ({len(desc)} chars en description, name='{fm['name']}')")
+          PYEOF
+
+      - name: Verify all references exist
+        run: |
+          set -euo pipefail
+          REFS=(
+            auth-and-sessions.md
+            input-validation.md
+            data-security.md
+            logging-and-monitoring.md
+            docker.md
+            iac-terraform.md
+            node-nestjs.md
+            python.md
+            frontend.md
+          )
+          MISSING=0
+          for ref in "${REFS[@]}"; do
+            if [ ! -f "rules/references/$ref" ]; then
+              echo "::error::Falta rules/references/$ref"
+              MISSING=1
+            fi
+          done
+          exit $MISSING
+
+      - name: Check .claude/rules is in sync with rules/
+        run: |
+          set -euo pipefail
+          # .claude/rules/ debe tener el mismo contenido que rules/ + references/ aplanado
+          # SKILL.md y todos los .md de references deben existir en .claude/rules/
+          if ! diff -q rules/SKILL.md .claude/rules/SKILL.md > /dev/null; then
+            echo "::error::rules/SKILL.md y .claude/rules/SKILL.md no coinciden"
+            echo "Para sincronizar: cp rules/SKILL.md .claude/rules/SKILL.md"
+            exit 1
+          fi
+          for ref in rules/references/*.md; do
+            name=$(basename "$ref")
+            if [ ! -f ".claude/rules/$name" ]; then
+              echo "::error::Falta .claude/rules/$name"
+              exit 1
+            fi
+            if ! diff -q "$ref" ".claude/rules/$name" > /dev/null; then
+              echo "::error::$ref y .claude/rules/$name no coinciden"
+              exit 1
+            fi
+          done
+          echo "✅ rules/ y .claude/rules/ están sincronizados"
+
+      - name: Markdown lint (basic)
+        run: |
+          python3 <<'PYEOF'
+          import os, sys
+          from markdown_it import MarkdownIt
+
+          md = MarkdownIt()
+          errors = 0
+          for root, dirs, files in os.walk("rules"):
+              for f in files:
+                  if not f.endswith(".md"):
+                      continue
+                  path = os.path.join(root, f)
+                  try:
+                      with open(path) as fp:
+                          md.parse(fp.read())
+                  except Exception as e:
+                      print(f"::error file={path}::Markdown inválido: {e}")
+                      errors += 1
+          sys.exit(errors)
+          PYEOF
+
+      - name: Summary
+        if: success()
+        run: echo "✅ Todos los rules validan OK"

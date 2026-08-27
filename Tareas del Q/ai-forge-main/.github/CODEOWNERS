@@ -1,0 +1,26 @@
+# CODEOWNERS — quién aprueba qué en ai-forge
+#
+# Sintaxis: <pattern> <owner1> <owner2> ...
+# El último match gana. Los más específicos van abajo.
+
+# Default: AppSec revisa todo
+*                                   @cashea/appsec
+
+# Rules de seguridad: SOLO AppSec puede modificar
+/rules/                             @cashea/appsec
+/.claude/rules/                     @cashea/appsec
+/.github/CODEOWNERS                 @cashea/appsec
+/SECURITY.md                        @cashea/appsec
+
+# Workflows críticos: AppSec + DevOps
+/.github/workflows/                 @cashea/appsec @cashea/devops
+/scaffolding/                       @cashea/appsec @cashea/devops
+
+# Issue templates: AppSec
+/.github/ISSUE_TEMPLATE/            @cashea/appsec
+
+# Docs: AppSec + colaboraciones abiertas
+/docs/                              @cashea/appsec
+
+# README: AppSec (es la cara del repo)
+/README.md                          @cashea/appsec

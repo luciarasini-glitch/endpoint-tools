@@ -1,0 +1,91 @@
+// ─────────────────────────────────────────────────────────────
+//  Cashea Ciberseg Tracker — Google Apps Script Backend
+//  Instrucciones:
+//  1. Abrí tu Google Sheet → Extensions → Apps Script
+//  2. Borrá el código que viene por defecto y pegá este
+//  3. Guardá (Ctrl+S)
+//  4. Click en "Deploy" → "Manage deployments" → editar el existente
+//     (o "New deployment" si es la primera vez)
+//  5. Type: Web App | Execute as: Me | Who has access: Anyone
+//  6. Click Deploy → copiá la URL
+//  7. Pegá esa URL en la webapp cuando te la pida
+// ─────────────────────────────────────────────────────────────
+
+const SHEET_NAME = 'TaskState';
+
+function doGet(e) {
+  const action = e.parameter.action || 'get';
+
+  try {
+    const sheet = getOrCreateSheet();
+
+    if (action === 'get') {
+      return getAllData(sheet);
+    }
+
+    if (action === 'set') {
+      const taskId = e.parameter.taskId;
+      const status = e.parameter.status;
+      if (taskId && status) upsertRow(sheet, taskId, { status });
+      return respond({ ok: true });
+    }
+
+    if (action === 'note') {
+      const taskId = e.parameter.taskId;
+      const note   = e.parameter.note || '';
+      if (taskId) upsertRow(sheet, taskId, { note });
+      return respond({ ok: true });
+    }
+
+    return respond({ error: 'unknown action' });
+
+  } catch(err) {
+    return respond({ error: err.message });
+  }
+}
+
+function getAllData(sheet) {
+  const data  = sheet.getDataRange().getValues();
+  const state = {};
+  const notes = {};
+  for (let i = 1; i < data.length; i++) {
+    const [taskId, status, note] = data[i];
+    if (taskId) {
+      state[taskId] = status || 'todo';
+      notes[taskId] = note  || '';
+    }
+  }
+  return respond({ state, notes });
+}
+
+function upsertRow(sheet, taskId, fields) {
+  const data = sheet.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === taskId) { rowIndex = i + 1; break; }
+  }
+  if (rowIndex === -1) {
+    sheet.appendRow([taskId, fields.status || 'todo', fields.note || '']);
+  } else {
+    if (fields.status !== undefined) sheet.getRange(rowIndex, 2).setValue(fields.status);
+    if (fields.note   !== undefined) sheet.getRange(rowIndex, 3).setValue(fields.note);
+  }
+}
+
+function getOrCreateSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.appendRow(['task_id', 'status', 'note']);
+    sheet.setFrozenRows(1);
+    sheet.getRange('A1:C1').setFontWeight('bold');
+  }
+  return sheet;
+}
+
+function respond(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}

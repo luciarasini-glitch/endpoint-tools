@@ -1,0 +1,189 @@
+{
+  "command_id": "6a1d92e1f762ddb698dbd7d5",
+  "command_name": "Install TrendMicro Windows Completo NUEVO",
+  "command_type": "windows",
+  "target_platform": "Windows",
+  "started_at_utc": "2026-07-13T15:56:50.376365+00:00",
+  "csv_path": "reports/jumpcloud_targets_6a1d92e1f762ddb698dbd7d5_20260713.csv",
+  "requested_count": 15,
+  "executed_count": 15,
+  "http_status": 200,
+  "run_response": {
+    "queueIds": [
+      "6a550ac2c51b3f6f4368f70f",
+      "6a550ac2c51b3f6f4368f711",
+      "6a550ac2c51b3f6f4368f713",
+      "6a550ac2c51b3f6f4368f715",
+      "6a550ac2c51b3f6f4368f717",
+      "6a550ac2c51b3f6f4368f719",
+      "6a550ac2c51b3f6f4368f71b",
+      "6a550ac2c51b3f6f4368f71d",
+      "6a550ac2c51b3f6f4368f71f",
+      "6a550ac2c51b3f6f4368f721",
+      "6a550ac2c51b3f6f4368f724",
+      "6a550ac2c51b3f6f4368f72f",
+      "6a550ac2c51b3f6f4368f731",
+      "6a550ac2c51b3f6f4368f733",
+      "6a550ac2c51b3f6f4368f736"
+    ],
+    "workflowInstanceId": "6a550ac2c51b3f6f4368f70c"
+  },
+  "systems": [
+    {
+      "requested_hostname": "DESKTOP-9OH15I5",
+      "system_id": "6954520d154ac798f5eff696",
+      "display_name": "DESKTOP-9OH15I5",
+      "hostname": "DESKTOP-9OH15I5",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-13T15:56:24.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "LAPTOP-8OT2TVN5",
+      "system_id": "69bae4ccb34e2729fcc96aa3",
+      "display_name": "LAPTOP-8OT2TVN5",
+      "hostname": "LAPTOP-8OT2TVN5",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-09T22:39:59.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "LAPTOP-98EMGQSV",
+      "system_id": "6979244082eacf0e207fb0d5",
+      "display_name": "LAPTOP-98EMGQSV",
+      "hostname": "LAPTOP-98EMGQSV",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-03T20:11:41.558Z",
+      "agent_version": "2.142.5"
+    },
+    {
+      "requested_hostname": "LAPTOP-BJEHIU5V",
+      "system_id": "6814d29bcce1317a551b477c",
+      "display_name": "LAPTOP-BJEHIU5V",
+      "hostname": "LAPTOP-BJEHIU5V",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-13T08:50:43.999Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-HIJHR7B",
+      "system_id": "69711c2699fec887f8cf1da1",
+      "display_name": "DESKTOP-HIJHR7B",
+      "hostname": "DESKTOP-HIJHR7B",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-10T15:21:55.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-767BR2G",
+      "system_id": "6939d530347e8b43d370c061",
+      "display_name": "DESKTOP-767BR2G",
+      "hostname": "DESKTOP-767BR2G",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-13T15:56:19.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "LAPTOP-9M1FU0RQ",
+      "system_id": "69b48838a9c169b33f99237f",
+      "display_name": "LAPTOP-9M1FU0RQ",
+      "hostname": "LAPTOP-9M1FU0RQ",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-13T00:02:36.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-QT4O8M5",
+      "system_id": "6a0f8150a6f8466e017bcd4a",
+      "display_name": "DESKTOP-QT4O8M5",
+      "hostname": "DESKTOP-QT4O8M5",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-06-23T12:46:24.000Z",
+      "agent_version": "2.140.1"
+    },
+    {
+      "requested_hostname": "DESKTOP-ETFUL3S",
+      "system_id": "6a1e0b51c2f92c88d1a5d69b",
+      "display_name": "DESKTOP-ETFUL3S",
+      "hostname": "DESKTOP-ETFUL3S",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-13T15:32:32.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-F5D9767",
+      "system_id": "6a1f0b871d4666e325c8f538",
+      "display_name": "DESKTOP-F5D9767",
+      "hostname": "DESKTOP-F5D9767",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-13T15:55:37.000Z",
+      "agent_version": "2.142.5"
+    },
+    {
+      "requested_hostname": "DESKTOP-K6GKDTA",
+      "system_id": "6a285f7dfc6fb1adf3816141",
+      "display_name": "DESKTOP-K6GKDTA",
+      "hostname": "DESKTOP-K6GKDTA",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-13T01:16:15.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-VK0N71C",
+      "system_id": "6a2877df86a623882531a0e6",
+      "display_name": "DESKTOP-VK0N71C",
+      "hostname": "DESKTOP-VK0N71C",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-11T03:06:40.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-S64NF6C",
+      "system_id": "6a287a09303e51f1f3dfbbbe",
+      "display_name": "DESKTOP-S64NF6C",
+      "hostname": "DESKTOP-S64NF6C",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-13T15:55:44.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-APTIV31",
+      "system_id": "6a288a6e2b055951cfe96ee3",
+      "display_name": "DESKTOP-APTIV31",
+      "hostname": "DESKTOP-APTIV31",
+      "os": "Windows",
+      "active": false,
+      "last_contact": "2026-07-11T05:01:29.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-U51DUHG",
+      "system_id": "6a46be08f4690bda855916f8",
+      "display_name": "DESKTOP-U51DUHG",
+      "hostname": "DESKTOP-U51DUHG",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-13T15:54:04.000Z",
+      "agent_version": "2.144.2"
+    }
+  ],
+  "skipped": {
+    "missing": [],
+    "duplicates": [],
+    "nonwindows": [],
+    "platform_mismatches": []
+  }
+}

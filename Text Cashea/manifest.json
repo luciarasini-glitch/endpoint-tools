@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Text Cashea",
+  "version": "0.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnFy6K5PqJAMuK2Snur7kCOmztxpij4aKpv8ikCrB1JH6vVJqmGzrgVqLddF63NsJBVVT5ltPz4vafTjnD52x/eLagMrpTjRsBFvDLBntH3l6ID0znpH5VypAH/Rt1Hyaxs9pXBDGO/0Clgbxlshit5pX3GYpZRsCSjrdvgRsufyQk9LmIh4h5YvToVJkrdjuuduKcAwVfdoCW9dAF6ovbvHZfgwcJ1g4W9/OdpxFYGlsN2k5wtDIcqvgfuh0DfyQwRdqMErTYFQ71uFXoGdV9ExgmmxoBOuuQNSkEjg+339yjtXE2ygiLJW/XxpzDYIwQEk9asKpR706xKpHGHZmDwIDAQAB",
+  "description": "Expansor de snippets de texto: definí atajos (ej. /firma) y expandilos en cualquier campo editable del navegador.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content-script.js"],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "match_about_blank": true
+    },
+    {
+      "matches": ["https://docs.google.com/document/*"],
+      "js": ["src/content/google-docs.js"],
+      "run_at": "document_idle",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "options_ui": {
+    "page": "src/options/options.html",
+    "open_in_tab": true
+  }
+}

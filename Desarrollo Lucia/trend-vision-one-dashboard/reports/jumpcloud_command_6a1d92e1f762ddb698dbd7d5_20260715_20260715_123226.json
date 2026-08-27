@@ -1,0 +1,46 @@
+{
+  "command_id": "6a1d92e1f762ddb698dbd7d5",
+  "command_name": "Install TrendMicro Windows Completo NUEVO",
+  "command_type": "windows",
+  "target_platform": "Windows",
+  "started_at_utc": "2026-07-15T12:32:26.646412+00:00",
+  "csv_path": "reports/jumpcloud_targets_6a1d92e1f762ddb698dbd7d5_20260715_093210.csv",
+  "requested_count": 2,
+  "executed_count": 2,
+  "http_status": 200,
+  "run_response": {
+    "queueIds": [
+      "6a577ddbad29dfa900fa4604",
+      "6a577ddbad29dfa900fa4606"
+    ],
+    "workflowInstanceId": "6a577ddbad29dfa900fa4601"
+  },
+  "systems": [
+    {
+      "requested_hostname": "DESKTOP-HHIK7VS",
+      "system_id": "6a42f57b161d76d27c15c3b1",
+      "display_name": "DESKTOP-HHIK7VS",
+      "hostname": "DESKTOP-HHIK7VS",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-15T12:30:14.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "DESKTOP-61PBL9F",
+      "system_id": "6a3599827df8126f16208531",
+      "display_name": "DESKTOP-61PBL9F",
+      "hostname": "DESKTOP-61PBL9F",
+      "os": "Windows",
+      "active": true,
+      "last_contact": "2026-07-15T12:30:02.000Z",
+      "agent_version": "2.144.2"
+    }
+  ],
+  "skipped": {
+    "missing": [],
+    "duplicates": [],
+    "nonwindows": [],
+    "platform_mismatches": []
+  }
+}

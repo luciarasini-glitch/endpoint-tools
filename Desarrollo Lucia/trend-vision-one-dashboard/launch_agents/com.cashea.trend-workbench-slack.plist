@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cashea.trend-workbench-slack</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/luciarasini/Documents/Desarrollo Lucia/trend-vision-one-dashboard/scripts/start_workbench_slack_notifier.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/luciarasini/Documents/Desarrollo Lucia/trend-vision-one-dashboard</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/luciarasini/Documents/Desarrollo Lucia/trend-vision-one-dashboard/logs/workbench-slack.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/luciarasini/Documents/Desarrollo Lucia/trend-vision-one-dashboard/logs/workbench-slack.err.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONUNBUFFERED</key>
+    <string>1</string>
+  </dict>
+</dict>
+</plist>

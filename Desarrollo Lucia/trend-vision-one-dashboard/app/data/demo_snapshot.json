@@ -1,0 +1,78 @@
+{
+  "users": [
+    {
+      "id": "u-1001",
+      "displayName": "Ana Gomez",
+      "email": "ana.gomez@example.com",
+      "department": "Finance",
+      "title": "Finance Manager",
+      "status": "active"
+    },
+    {
+      "id": "u-1002",
+      "displayName": "Bruno Silva",
+      "email": "bruno.silva@example.com",
+      "department": "Engineering",
+      "title": "Platform Engineer",
+      "status": "active"
+    }
+  ],
+  "endpoint_inventory": [
+    {
+      "id": "d-2001",
+      "hostname": "fin-laptop-01",
+      "platform": "Windows",
+      "ipAddress": "10.0.0.21",
+      "owner": "ana.gomez@example.com",
+      "lastSeenAt": "2026-03-20T15:30:00Z"
+    },
+    {
+      "id": "d-2002",
+      "hostname": "eng-mbp-02",
+      "platform": "macOS",
+      "ipAddress": "10.0.0.45",
+      "owner": "u-1002",
+      "lastSeenAt": "2026-03-20T16:00:00Z"
+    }
+  ],
+  "risk_insights": [
+    {
+      "id": "r-3001",
+      "title": "High-risk sign-in pattern",
+      "severity": "high",
+      "status": "open",
+      "userId": "u-1001",
+      "detectedAt": "2026-03-20T14:10:00Z"
+    }
+  ],
+  "connected_products": [
+    {
+      "id": "c-4001",
+      "name": "Trend Endpoint Sensor",
+      "category": "edr",
+      "status": "healthy",
+      "deviceId": "d-2001",
+      "userId": "u-1001"
+    },
+    {
+      "id": "c-4002",
+      "name": "XDR Telemetry",
+      "category": "telemetry",
+      "status": "healthy",
+      "deviceId": "d-2002",
+      "userId": "u-1002"
+    }
+  ],
+  "workbench_alerts": [
+    {
+      "id": "a-5001",
+      "title": "Suspicious PowerShell execution",
+      "severity": "medium",
+      "status": "new",
+      "deviceId": "d-2001",
+      "userId": "u-1001",
+      "createdDateTime": "2026-03-20T14:20:00Z"
+    }
+  ]
+}
+

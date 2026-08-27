@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none';">
+<title>Cashea · Ciberseg & IT Ops Q3 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: #111111;
+  color: #F0F0F0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── PACE BAR top ── */
+#pace-bar {
+  height: 3px;
+  background: #2a2a2a;
+  position: relative;
+  flex-shrink: 0;
+}
+#pace-time-fill { position: absolute; top:0; left:0; height:100%; background:#333; }
+#pace-task-fill { position: absolute; top:0; left:0; height:100%; transition: width .6s; }
+
+/* ── HEADER ── */
+header {
+  height: 60px;
+  background: #1A1A1A;
+  border-bottom: 1px solid #2D2D2D;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FDFA3D;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-dot { width: 8px; height: 8px; border-radius: 50%; background: #FDFA3D; }
+.header-sep { width: 1px; height: 22px; background: #333; }
+.header-label { font-size: 13px; color: #777; font-weight: 400; }
+
+.pace-widget {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 8px 16px;
+}
+.pace-widget-text { display: flex; flex-direction: column; gap: 1px; }
+.pace-main { font-size: 13px; font-weight: 600; }
+.pace-sub  { font-size: 10px; color: #555; }
+.pace-track-wrap { display: flex; flex-direction: column; gap: 4px; }
+.pace-track {
+  width: 140px; height: 6px;
+  background: #2D2D2D;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.pace-track-time { position:absolute; top:0; left:0; height:100%; background: #3a3a3a; border-radius:3px; }
+.pace-track-tasks { position:absolute; top:0; left:0; height:100%; border-radius:3px; transition: width .6s; }
+.pace-legend { display:flex; justify-content:space-between; font-size:9px; color:#555; }
+.pace-pct-chip {
+  font-size: 13px; font-weight: 700;
+  padding: 4px 12px; border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* ── APP BODY ── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+nav {
+  width: 220px;
+  background: #1A1A1A;
+  border-right: 1px solid #2D2D2D;
+  overflow-y: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+nav::-webkit-scrollbar { width: 4px; }
+nav::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+.nav-section { padding: 6px 14px; }
+.nav-section-label {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 9px; font-weight: 700;
+  color: #555; letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 10px 6px 6px;
+  cursor: pointer; user-select: none;
+  transition: color .15s;
+}
+.nav-section-label:hover { color: #888; }
+.nav-section-label .nav-arrow {
+  font-size: 8px; color: #444;
+  transition: transform .2s;
+}
+.nav-section.collapsed .nav-arrow { transform: rotate(-90deg); }
+.nav-section-items { overflow: hidden; }
+.nav-section.collapsed .nav-section-items { display: none; }
+.nav-item {
+  display: flex; align-items: center;
+  gap: 8px; padding: 8px 10px;
+  border-radius: 8px; cursor: pointer;
+  font-size: 13px; color: #888;
+  transition: background .15s, color .15s;
+}
+.nav-item:hover { background: #222; color: #CCC; }
+.nav-item.active { background: rgba(253,250,61,.1); color: #FDFA3D; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.nav-dot-critico { background: #FF6B6B; }
+.nav-dot-alto    { background: #FFD060; }
+.nav-dot-medio   { background: #52C48A; }
+.nav-dot-plan    { background: #7BB3F0; }
+.nav-txt { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-badge {
+  font-size: 10px; color: #555;
+  background: #222; border-radius: 10px;
+  padding: 1px 7px; flex-shrink: 0;
+}
+.nav-item.active .nav-badge { background: rgba(253,250,61,.15); color: #FDFA3D; }
+.nav-sep { height: 1px; background: #2D2D2D; margin: 10px 14px; }
+
+/* ── MAIN ── */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background: #1A1A1A;
+  border-bottom: 1px solid #2D2D2D;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.toolbar-title { font-size: 15px; font-weight: 600; color: #F0F0F0; flex: 1; min-width: 80px; }
+.search-box {
+  display: flex; align-items: center; gap: 7px;
+  background: #222; border: 1px solid #333;
+  border-radius: 8px; padding: 6px 12px;
+}
+.search-box input {
+  background: none; border: none; outline: none;
+  font-family: inherit; font-size: 13px;
+  color: #F0F0F0; width: 160px;
+}
+.search-box input::placeholder { color: #444; }
+.search-ico { color: #444; font-size: 14px; }
+
+.pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  font-size: 11px; font-family: inherit;
+  padding: 5px 13px; border-radius: 20px;
+  border: 1px solid #333; background: #222;
+  color: #888; cursor: pointer;
+  transition: all .15s;
+}
+.pill:hover { border-color: #444; color: #CCC; }
+.pill.active-p0  { background: rgba(255,107,107,.15); border-color: rgba(255,107,107,.4); color: #FF6B6B; }
+.pill.active-p1  { background: rgba(255,208,96,.12);  border-color: rgba(255,208,96,.35); color: #FFD060; }
+.pill.active-p2  { background: #2A2A2A; border-color: #444; color: #CCC; }
+.pill.active-done { background: rgba(82,196,138,.12); border-color: rgba(82,196,138,.35); color: #52C48A; }
+.pill.active-in_progress { background: rgba(253,250,61,.08); border-color: rgba(253,250,61,.25); color: #FDFA3D; }
+.pill.active-todo { background: #222; border-color: #444; color: #CCC; }
+
+/* ── STATS ── */
+.stats {
+  display: flex; gap: 10px;
+  padding: 12px 22px;
+  border-bottom: 1px solid #2D2D2D;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.stats::-webkit-scrollbar { height: 3px; }
+.stat {
+  flex-shrink: 0; min-width: 100px;
+  background: #1A1A1A; border: 1px solid #2D2D2D;
+  border-radius: 10px; padding: 10px 16px;
+}
+.stat-label { font-size: 10px; color: #555; margin-bottom: 4px; }
+.stat-val { font-size: 22px; font-weight: 700; color: #F0F0F0; }
+.stat-val.yellow { color: #FDFA3D; }
+.stat-val.green  { color: #52C48A; }
+.stat-val.amber  { color: #FFD060; }
+.stat-val.red    { color: #FF6B6B; }
+.stat-sub { font-size: 10px; color: #444; margin-top: 2px; }
+
+/* ── CONTENT SCROLL ── */
+.content {
+  flex: 1; overflow-y: auto;
+  padding: 16px 22px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-thumb { background: #2D2D2D; border-radius: 3px; }
+
+/* ── RISK CARD ── */
+.risk-card {
+  border: 1px solid #2D2D2D;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1A1A1A;
+  transition: border-color .15s;
+  flex-shrink: 0;
+}
+.risk-card:hover { border-color: #3A3A3A; }
+
+.risk-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer; user-select: none;
+  background: #1A1A1A;
+}
+.risk-header:hover { background: #1E1E1E; }
+
+.risk-id {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 6px;
+  flex-shrink: 0; letter-spacing: .03em;
+  font-family: inherit;
+}
+.risk-id.critico { background: rgba(255,107,107,.18); color: #FF8080; border: 1px solid rgba(255,107,107,.35); }
+.risk-id.alto    { background: rgba(255,208,96,.15);  color: #FFD060; border: 1px solid rgba(255,208,96,.35); }
+.risk-id.medio   { background: rgba(82,196,138,.15);  color: #52C48A; border: 1px solid rgba(82,196,138,.35); }
+.risk-id.plan    { background: rgba(123,179,240,.15); color: #7BB3F0; border: 1px solid rgba(123,179,240,.35); }
+
+.risk-name {
+  flex: 1;
+  font-size: 14px; font-weight: 500;
+  color: #F0F0F0; line-height: 1.4;
+}
+
+.risk-meta {
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0;
+}
+.risk-sev-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: #555;
+}
+.risk-counter { font-size: 11px; color: #555; }
+.risk-prog {
+  display: flex; align-items: center; gap: 10px;
+}
+.prog-bar {
+  width: 80px; height: 5px;
+  background: #2D2D2D; border-radius: 3px; overflow: hidden;
+}
+.prog-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+.prog-pct { font-size: 12px; font-weight: 700; min-width: 34px; text-align: right; }
+.chevron {
+  font-size: 12px; color: #444;
+  transition: transform .2s; flex-shrink: 0;
+}
+.risk-card.open .chevron { transform: rotate(180deg); }
+
+/* ── TASKS BODY ── */
+.tasks-body { display: none; }
+.risk-card.open .tasks-body { display: block; }
+
+.task-row {
+  display: flex; align-items: flex-start;
+  gap: 12px; padding: 12px 20px;
+  border-top: 1px solid #222;
+  background: #161616;
+  transition: background .1s;
+}
+.task-row:hover { background: #1C1C1C; }
+.task-row:last-child { border-radius: 0 0 11px 11px; }
+
+/* status toggle */
+.status-btn {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid #333; background: transparent;
+  cursor: pointer; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; font-size: 11px;
+}
+.status-btn.todo:hover { border-color: #FFD060; }
+.status-btn.in_progress {
+  border-color: #FFD060;
+  background: rgba(255,208,96,.15);
+}
+.status-btn.in_progress::after {
+  content: ''; width: 8px; height: 8px;
+  border-radius: 50%; background: #FFD060;
+}
+.status-btn.done { border-color: #52C48A; background: #52C48A; }
+.status-btn.done::after { content: '✓'; color: #111; font-weight: 800; font-size: 12px; }
+
+.task-info { flex: 1; min-width: 0; }
+.task-title {
+  font-size: 13px; font-weight: 400;
+  color: #DDDDDD; line-height: 1.5;
+}
+.task-row.done .task-title { color: #444; text-decoration: line-through; }
+.task-row.dismissed { opacity: .45; }
+.task-row.dismissed .task-title { color: #555; text-decoration: line-through; }
+.dismiss-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 15px; color: #333; padding: 2px 4px;
+  flex-shrink: 0; align-self: flex-start; margin-top: 1px;
+  transition: color .15s; line-height: 1;
+}
+.dismiss-btn:hover { color: #FF6B6B; }
+.dismiss-btn.dismissed { color: #FF6B6B; }
+
+.task-chips {
+  display: flex; flex-wrap: wrap;
+  gap: 5px; margin-top: 6px;
+}
+.chip {
+  font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 5px;
+  white-space: nowrap;
+}
+.chip-owner  { background: #222; color: #888; border: 1px solid #2D2D2D; cursor: pointer; }
+.chip-owner:hover { border-color: #444; color: #BBB; }
+.chip-owner.owner-active { background: rgba(253,250,61,.12); color: #FDFA3D; border-color: rgba(253,250,61,.3); }
+.task-ts { font-size: 10px; color: #3A3A3A; margin-left: 2px; }
+.chip-jul    { background: rgba(255,154,92,.12); color: #FF9A5C; }
+.chip-ago    { background: rgba(255,208,96,.1);  color: #FFD060; }
+.chip-sep    { background: #1E1E1E; color: #555; }
+.chip-none   { background: #1E1E1E; color: #444; }
+.chip-epic   { background: rgba(123,179,240,.12); color: #7BB3F0; }
+.chip-bau    { background: #1E1E1E; color: #444; }
+.chip-api    { background: rgba(82,196,138,.1);  color: #52C48A; }
+
+.prio-chip {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 5px;
+  margin-top: 2px; flex-shrink: 0; align-self: flex-start;
+}
+.prio-P0 { background: rgba(255,107,107,.18); color: #FF6B6B; }
+.prio-P1 { background: rgba(255,208,96,.12);  color: #FFD060; }
+.prio-P2 { background: #1E1E1E; color: #555; }
+
+/* ── TASK NOTES ── */
+.note-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; color: #333; padding: 2px 4px;
+  flex-shrink: 0; align-self: flex-start; margin-top: 1px;
+  transition: color .15s; line-height: 1;
+}
+.note-btn:hover { color: #777; }
+.note-btn.has-note { color: #FDFA3D; }
+.note-area {
+  display: none;
+  padding: 0 20px 12px 52px;
+  background: #161616;
+  border-top: 1px dashed #222;
+}
+.note-area.open { display: block; }
+.note-textarea {
+  width: 100%; min-height: 72px;
+  background: #1A1A1A; border: 1px solid #2D2D2D;
+  border-radius: 8px; padding: 10px 12px;
+  font-family: inherit; font-size: 12px;
+  color: #CCC; resize: vertical; outline: none;
+  transition: border-color .15s;
+}
+.note-textarea:focus { border-color: #444; }
+.note-textarea::placeholder { color: #3A3A3A; }
+
+/* ── DASHBOARD ── */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+.dash-card {
+  background: #1A1A1A; border: 1px solid #2D2D2D;
+  border-radius: 12px; padding: 16px;
+  cursor: pointer; transition: border-color .15s;
+}
+.dash-card:hover { border-color: #3A3A3A; }
+.dash-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.dash-card-title { font-size: 12px; color: #999; flex: 1; line-height: 1.4; }
+.dash-prog-bar { height: 6px; background: #2D2D2D; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+.dash-prog-fill { height: 100%; border-radius: 3px; }
+.dash-meta { display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 70px; color: #444; font-size: 14px; }
+
+/* ── SCROLLBAR global ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2D2D2D; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+
+<div id="pace-bar">
+  <div id="pace-time-fill"></div>
+  <div id="pace-task-fill"></div>
+</div>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>Cashea</div>
+  <div class="header-sep"></div>
+  <div class="header-label">Ciberseg &amp; IT Ops · Q3 2026</div>
+  <div class="pace-widget">
+    <div class="pace-widget-text">
+      <div class="pace-main" id="pw-status">—</div>
+      <div class="pace-sub"  id="pw-day">Q3: Jul 1 → Sep 30</div>
+    </div>
+    <div class="pace-track-wrap">
+      <div class="pace-track">
+        <div class="pace-track-time"  id="pt-time"></div>
+        <div class="pace-track-tasks" id="pt-tasks"></div>
+      </div>
+      <div class="pace-legend">
+        <span id="pl-time">tiempo 0%</span>
+        <span id="pl-tasks">tareas 0%</span>
+      </div>
+    </div>
+    <div class="pace-pct-chip" id="pw-chip">0%</div>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="nav-section">
+      <div class="nav-section-label">Vistas</div>
+      <div class="nav-item active" data-view="dashboard" onclick="setView('dashboard',this)">
+        <span style="font-size:14px">◎</span>
+        <span class="nav-txt">Dashboard</span>
+      </div>
+      <div class="nav-item" data-view="risks" onclick="setView('risks',this)">
+        <span style="font-size:14px">⊞</span>
+        <span class="nav-txt">Por Riesgo</span>
+        <span class="nav-badge" id="badge-count">17</span>
+      </div>
+      <div class="nav-item" data-view="owner" onclick="setView('owner',this)">
+        <span style="font-size:14px">◉</span>
+        <span class="nav-txt">Por Dueño</span>
+      </div>
+    </div>
+
+    <div class="nav-sep"></div>
+
+    <div class="nav-section collapsed" id="ns-critico">
+      <div class="nav-section-label" onclick="toggleNavSection('ns-critico')">
+        <span>Críticos</span><span class="nav-arrow">▾</span>
+      </div>
+      <div class="nav-section-items" id="nav-critico"></div>
+    </div>
+    <div class="nav-section collapsed" id="ns-alto">
+      <div class="nav-section-label" onclick="toggleNavSection('ns-alto')">
+        <span>Altos</span><span class="nav-arrow">▾</span>
+      </div>
+      <div class="nav-section-items" id="nav-alto"></div>
+    </div>
+    <div class="nav-section collapsed" id="ns-medio">
+      <div class="nav-section-label" onclick="toggleNavSection('ns-medio')">
+        <span>Medios</span><span class="nav-arrow">▾</span>
+      </div>
+      <div class="nav-section-items" id="nav-medio"></div>
+    </div>
+    <div class="nav-section collapsed" id="ns-plan">
+      <div class="nav-section-label" onclick="toggleNavSection('ns-plan')">
+        <span>Plan Operativo</span><span class="nav-arrow">▾</span>
+      </div>
+      <div class="nav-section-items" id="nav-plan"></div>
+    </div>
+
+    <div class="nav-sep"></div>
+
+    <div class="nav-section collapsed" id="ns-teams">
+      <div class="nav-section-label" onclick="toggleNavSection('ns-teams')">
+        <span>Equipos</span><span class="nav-arrow">▾</span>
+      </div>
+      <div class="nav-section-items" id="nav-teams"></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="toolbar">
+      <span class="toolbar-title" id="toolbar-title">Dashboard Q3 2026</span>
+      <div class="search-box">
+        <span class="search-ico">⌕</span>
+        <input id="search" type="text" placeholder="Buscar tarea u owner…" oninput="renderMain()">
+      </div>
+      <div class="pills">
+        <button class="pill" data-f="P0"          onclick="togglePill(this,'P0')">P0</button>
+        <button class="pill" data-f="P1"          onclick="togglePill(this,'P1')">P1</button>
+        <button class="pill" data-f="P2"          onclick="togglePill(this,'P2')">P2</button>
+        <button class="pill" data-f="done"        onclick="togglePill(this,'done')">✓ Completadas</button>
+        <button class="pill" data-f="in_progress" onclick="togglePill(this,'in_progress')">● En progreso</button>
+        <button class="pill" data-f="todo"        onclick="togglePill(this,'todo')">○ Pendientes</button>
+      </div>
+      <button class="pill" id="expand-btn" onclick="toggleExpandAll()">⊞ Expandir todo</button>
+      <span id="owner-filter-chip" onclick="clearOwnerFilter()" style="display:none;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(253,250,61,.12);color:#FDFA3D;border:1px solid rgba(253,250,61,.3);cursor:pointer"></span>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button class="pill" onclick="exportCSV()" title="Exportar CSV">↓ CSV</button>
+        <button class="pill" onclick="exportPDF()" title="Exportar PDF">↓ PDF</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+const RISKS = [
+  {id:'R-002',sev:'critico',title:'Fuga de info por debilidades en integraciones con terceros'},
+  {id:'R-004',sev:'critico',title:'Debilidades en configuraciones de infraestructura/cloud'},
+  {id:'R-005',sev:'critico',title:'Vulnerabilidades técnicas en aplicaciones y APIs'},
+  {id:'R-014',sev:'critico',title:'Falta de gobierno y control sobre datos sensibles'},
+  {id:'R-001',sev:'alto',   title:'Exposición de credenciales mediante ingeniería social'},
+  {id:'R-003',sev:'alto',   title:'Imposibilidad de operar por incumplimiento normativo'},
+  {id:'R-006',sev:'alto',   title:'Gestión inadecuada de secretos y credenciales'},
+  {id:'R-007',sev:'alto',   title:'Fuga por pérdida o robo de dispositivos'},
+  {id:'R-009',sev:'alto',   title:'Debilidades en recuperación ante desastres'},
+  {id:'R-010',sev:'alto',   title:'Detección tardía de incidentes — monitoreo y logs'},
+  {id:'R-012',sev:'alto',   title:'Configuraciones débiles en ofimática / Shadow IT'},
+  {id:'R-013',sev:'alto',   title:'Sobreexposición de datos en soluciones de IA'},
+  {id:'R-015',sev:'alto',   title:'Accesos no autorizados por falta de gobierno IAM'},
+  {id:'R-016',sev:'alto',   title:'Fraude por suplantación de identidad digital de Cashea'},
+  {id:'R-008',sev:'medio',  title:'Código malicioso en endpoints corporativos'},
+  {id:'R-011',sev:'medio',  title:'Fallas ambientales o acceso físico no controlado'},
+  {id:'IT-OPS',sev:'plan',  title:'IT Operations Plan Q3'},
+];
+
+const TASKS = [
+  {id:'t001',risk:'R-002',title:'Evaluación TPRM de proveedores → 40% de 163 terceros evaluados (hoy 21%)',owner:'Moni + Nico',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t002',risk:'R-002',title:'Inclusión cláusulas de seguridad en contratos → 22% con cláusulas (hoy 9%)',owner:'Moni + Nico',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t003',risk:'R-002',title:'Estándar de integraciones seguras con terceros → 27% de 58 integraciones (hoy 0%)',owner:'DevSecOps',team:'DevSecOps',type:'BAU',due:'sep',prio:'P0'},
+  {id:'t004',risk:'R-002',title:'Gestión e intercambio seguro de secretos — SDK CKAX: socializar, inventariar y crear skill/rule',owner:'CloudSec / Jota',team:'CloudSec',type:'EPIC',due:'jul',prio:'P0'},
+  {id:'t005',risk:'R-002',title:'Inventario credenciales terceros e internas en SM → 10% de 58 integraciones',owner:'Edgar + Alan',team:'CloudSec',type:'BAU',due:'sep',prio:null},
+  {id:'t006',risk:'R-002',title:'Threat Intel para terceros — implementación Checkpoint v2 (hoy v1 cti-news)',owner:'Die + Alan',team:'IRSec',type:'EPIC',due:'ago',prio:'P2'},
+  {id:'t007',risk:'R-002',title:'Monitoreo cuentas aliados y alertas por leak de credenciales → 100% casos de uso',owner:'Die + Alan',team:'IRSec',type:'BAU',due:'sep',prio:null},
+  {id:'t008',risk:'R-004',title:'Zero Trust — 100% dominios Cashea detrás de Cloudflare (hoy 51%, faltan 27 dominios)',owner:'Edgar + Alan',team:'CloudSec',type:'BAU',due:'sep',prio:'P0'},
+  {id:'t009',risk:'R-004',title:'Reducción superficie de ataque — 0 IPs públicas en instancias y BDs (hoy 8)',owner:'Edgar + Alan',team:'CloudSec',type:'EPIC',due:'ago',prio:'P0'},
+  {id:'t010',risk:'R-004',title:'Postura seguridad cloud — CSPM automático Trivy+Prowler + dashboard + PoC Wiz (Google)',owner:'Edgar + Alan',team:'CloudSec',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t011',risk:'R-004',title:'CIS compliance cloud — mejorar % en no-prod (hoy 52%) y prod (hoy 54%)',owner:'Edgar + Alan',team:'CloudSec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t012',risk:'R-004',title:'Golden Image para cloud runs — imagen estandarizada en todos los cloud runs',owner:'Jota + Alan / Alexis',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t013',risk:'R-004',title:'Vuln Management Infra — proceso de escaneo, herramienta interna y tablero',owner:'Edgar + Alan',team:'CloudSec',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t014',risk:'R-004',title:'WARP Cloudflare — configurar egress IP para oficinas VE y split tunnels',owner:'Edgar + Alan',team:'CloudSec',type:'EPIC',due:'jul',prio:'P0'},
+  {id:'t015',risk:'R-004',title:'WARP rollout — >95% de 1050 workstations conectadas (hoy 4%, 34 de 1050)',owner:'Edgar + Alan',team:'CloudSec',type:'BAU',due:'ago',prio:null},
+  {id:'t016',risk:'R-004',title:'EDR en servidores cloud — 100% con Trend Micro activo (hoy 0%)',owner:'Lu + Ama',team:'Endpoint Sec',type:'BAU',due:'ago',prio:'P0'},
+  {id:'t017',risk:'R-005',title:'Vuln Management ASPM — 0% vulns fuera de SLA (hoy 43% de 107 fuera del SLA)',owner:'DevSecOps / Pato',team:'DevSecOps',type:'BAU',due:'sep',prio:'P0'},
+  {id:'t018',risk:'R-005',title:'Pipeline seguro CD — Gates y Checks en GCP, 100% PRs y deploys escaneados',owner:'DevSecOps / Pato',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t019',risk:'R-005',title:'WAF — Cloudflare como primera línea de control + SCP restricción + dashboard',owner:'Gabo + Jota',team:'DevSecOps',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t020',risk:'R-005',title:'Threat Modeling en instancias tempranas — Insurance, IDP, KYC, TRM, Inversiones',owner:'Jota / DevSecOps',team:'DevSecOps',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t021',risk:'R-005',title:'Threat Modeling automático con IA — pipeline agente + self service devs',owner:'Gabo + Jota',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t022',risk:'R-005',title:'Desarrollo Seguro con IA — construir indicadores y mejorar skills y agente',owner:'Jota',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t023',risk:'R-005',title:'Inventario y test de endpoints (APIs) — 100% inventariados + test de efectividad',owner:'Jota / Gonza',team:'DevSecOps',type:'BAU',due:'jul',prio:'P1'},
+  {id:'t024',risk:'R-005',title:'Hardening Github — 100% recomendaciones Legitify implementadas (hoy 36%)',owner:'DevSecOps',team:'DevSecOps',type:'BAU',due:'sep',prio:'P2'},
+  {id:'t025',risk:'R-005',title:'Pentest cinta infinita — Loyalty, Wallet, Marketplace, IDP, TRM, CasheaHub',owner:'Jota',team:'AppSec',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t026',risk:'R-005',title:'Pentest Null Point — entregar informe',owner:'Jota',team:'AppSec',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t027',risk:'R-005',title:'Bug Bounty — PoC con Mundo y Wallet',owner:'Jota',team:'AppSec',type:'BAU',due:null,prio:'P1'},
+  {id:'t028',risk:'R-005',title:'Pentest Oficinas — ejecutar retest',owner:'Jota',team:'AppSec',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t029',risk:'R-005',title:'SCW — implementar e integrar GHAS+Jira + Learning Path OWASP Cashea',owner:'Kevops / GRC',team:'DevSecOps',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t108',risk:'R-005',title:'Programa Security Champions — diseñar programa formal: responsabilidades, proceso de incorporación',owner:'Jota',team:'AppSec',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t109',risk:'R-005',title:'PoC Kiggu — PoC servicio de Pentest externo continuo',owner:'Offensive',team:'AppSec',type:'EPIC',due:'jul',prio:'P2'},
+  {id:'t030',risk:'R-014',title:'Bóveda centralizada datos personales — RFC aceptado, fecha confirmada, implementada',owner:'Duffau / Nico Peralta',team:'DataSec',type:'EPIC',due:null,prio:'P0'},
+  {id:'t031',risk:'R-014',title:'Catálogo BigQuery — 100% datasets catalogados con tipo de dato restringido',owner:'Duffau',team:'DataSec',type:'BAU',due:null,prio:'P1'},
+  {id:'t032',risk:'R-014',title:'Hardening BQ, Buckets y DBs — 20% BDs, 23% Buckets, 25% BQs en cumplimiento',owner:'Duffau / CloudSec / Devops',team:'DataSec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t033',risk:'R-014',title:'Data Visibility & Logging — activar audit logs en todos los storages + alertas SOC',owner:'Duffau / Nati / Platform',team:'DataSec',type:'API',due:'ago',prio:'P1'},
+  {id:'t034',risk:'R-014',title:'Data Retention & Minimization — identificar 100% equipos con PII y enmascarar datos',owner:'Duffau / Nico Peralta',team:'DataSec',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t035',risk:'R-014',title:'Gestión accesos emergency SQL y estrategia para regularizar legacy BigQuery',owner:'Duffau',team:'DataSec',type:'BAU',due:null,prio:'P1'},
+  {id:'t036',risk:'R-014',title:'Clasificación y catalogación de datos en otras fuentes',owner:'Duffau',team:'DataSec',type:'BAU',due:null,prio:'P2'},
+  {id:'t037',risk:'R-014',title:'Deploy v1 Plataforma Valkyrie / DataShield — gestión owner, inventario, controles y KPIs',owner:'Duffau',team:'DataSec',type:'EPIC',due:null,prio:null},
+  {id:'t038',risk:'R-014',title:'[Endpoint] Retirar navegadores no Chrome Enterprise (salvo Edge) → 0 navegadores no autorizados',owner:'Lucia Rasini',team:'Endpoint Sec',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t039',risk:'R-014',title:'[Endpoint] Módulo DLP — activo y políticas configuradas',owner:'Lucia Rasini / Duffau',team:'Endpoint Sec',type:'BAU',due:'ago',prio:'P1'},
+  {id:'t040',risk:'R-001',title:'Programa concientización ciberseguridad — >90% avance en 1300 empleados (hoy 85%)',owner:'GRC',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t041',risk:'R-001',title:'Gestión accesos SSO+MFA obligatorio fase 3 — 21 nuevas aplicaciones con SSO',owner:'Agus y Brian',team:'IAM',type:'EPIC',due:'sep',prio:'P0'},
+  {id:'t042',risk:'R-001',title:'Cifrado y hardening endpoints — proceso E2E documentado y 100% laptops',owner:'Lucia Rasini',team:'Endpoint Sec',type:'EPIC',due:'ago',prio:'P0'},
+  {id:'t043',risk:'R-001',title:'Integración logs críticos al SIEM — Cloudflare WAF, WARP y recursos de red oficinas',owner:'Nati',team:'ObsSec',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t044',risk:'R-001',title:'PAM cuentas privilegiadas — 100% aplicaciones críticas con cuentas de contingencia en PAM',owner:'Agus y Brian',team:'IAM',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t045',risk:'R-001',title:'Vishing simulacro C-Level / VPs — ejecución + comunicación awareness de cierre',owner:'GRC',team:'GRC',type:'EPIC',due:'jul',prio:'P2'},
+  {id:'t046',risk:'R-001',title:'Phish-prone <10% y reincidentes <5% (hoy 25% y 9% respectivamente)',owner:'GRC',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t047',risk:'R-001',title:'Revisión correos sospechosos — mejorar antispam/antiphishing (380 reportes/mes)',owner:'Lucia y Ama / Moni y Nico',team:'Endpoint Sec',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t048',risk:'R-001',title:'Perfilado de usuarios — documento con perfil y costo TI por grupo',owner:'Ama',team:'IAM',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t049',risk:'R-003',title:'ISO 27001 — 12 políticas SGSI, SoA, alcance del SGSI + reporte periódico de avance',owner:'Moni + Nico',team:'GRC',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t050',risk:'R-003',title:'Controles ISO — mejorar cumplimiento desde 5% en 93 controles + tests (188 y 89)',owner:'Todo el equipo',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t051',risk:'R-006',title:'Rotación segura de credenciales (depende de gestión secretos R-002)',owner:'Alan',team:'CloudSec',type:'BAU',due:null,prio:'P2'},
+  {id:'t052',risk:'R-007',title:'Work profile BYOD — 100% dispositivos personales (celulares/tablets) con work profile',owner:'Lucia Rasini',team:'Endpoint Sec',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t053',risk:'R-007',title:'Enrolamiento teléfonos faltantes — 100% de 172 teléfonos en JumpCloud con políticas activas',owner:'Lucia Rasini',team:'Endpoint Sec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t054',risk:'R-007',title:'Linga + bolso (dispositivos físicos de seguridad)',owner:'Ama',team:'IAM',type:'BAU',due:null,prio:'P2'},
+  {id:'t055',risk:'R-007',title:'Awareness política uso laptop y ciclo vida activos IT',owner:'Ricci + Ama',team:'GRC',type:'EPIC',due:'ago',prio:'P2'},
+  {id:'t056',risk:'R-008',title:'[Endpoint] Categorización Local Apps Trend — 100% apps locales categorizadas en TrendMicro',owner:'Lucia Rasini',team:'Endpoint Sec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t057',risk:'R-008',title:'[Endpoint] Notion Endpoint Security — espacio publicado, accesible y actualizado',owner:'Lucia Rasini',team:'Endpoint Sec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t058',risk:'R-009',title:'BCP — Business Continuity Plan',owner:'Pato Rocca / DevOps',team:'DevSecOps',type:'BAU',due:null,prio:'P1'},
+  {id:'t059',risk:'R-009',title:'DRP — Disaster Recovery Plan',owner:'Pato Rocca / DevOps',team:'DevSecOps',type:'BAU',due:null,prio:'P1'},
+  {id:'t060',risk:'R-010',title:'SIEM — 60% casos de uso construidos (hoy 29%) + 100% alertas revisadas (hoy 92%)',owner:'ObsSec (Naty)',team:'ObsSec',type:'BAU',due:'sep',prio:'P0'},
+  {id:'t061',risk:'R-010',title:'Automatización respuesta incidentes — 40% alertas con respuesta automática (hoy 12%)',owner:'IRSec (Diego)',team:'IRSec',type:'BAU',due:'ago',prio:'P1'},
+  {id:'t062',risk:'R-010',title:'Threat Intel — 3 nuevos simulacros + 100% eventos externos analizados',owner:'IRSec (Diego)',team:'IRSec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t063',risk:'R-010',title:'Retención y securización logs — política e implementación para todos los servicios',owner:'ObsSec (Naty)',team:'ObsSec',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t064',risk:'R-010',title:'Agentes AI SOC nivel 1 — 100% alertas atendidas por agente AI (hoy 89%)',owner:'ObsSec + IRSec',team:'ObsSec',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t065',risk:'R-010',title:'Procedimiento forensia — toma de evidencia en máquinas virtuales',owner:'IRSec (Diego)',team:'IRSec',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t066',risk:'R-011',title:'Integración PRTG con Extended SOC Nextcom — cobertura nocturna y fines de semana',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'jul',prio:'P1'},
+  {id:'t067',risk:'R-012',title:'Hardening Notion — completar 100% configuraciones (hoy 50%)',owner:'GRC',team:'GRC',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t068',risk:'R-012',title:'Hardening Jira',owner:'GRC',team:'GRC',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t069',risk:'R-012',title:'Hardening Miro',owner:'GRC',team:'GRC',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t070',risk:'R-012',title:'Aplicaciones permitidas — whitelist con análisis y justificación',owner:'Moni',team:'GRC',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t071',risk:'R-012',title:'Hardening Figma, OpenAI, Claude, Intercom, Guru, HubSpot, Twilio',owner:'GRC',team:'GRC',type:'BAU',due:null,prio:'P2'},
+  {id:'t072',risk:'R-012',title:'Chrome Enterprise — 100% políticas CIS aplicadas a todos los endpoints (hoy 0%)',owner:'Lucia Rasini',team:'Endpoint Sec',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t073',risk:'R-012',title:'Categorización Public Cloud Apps Trend — 100% apps cloud categorizadas',owner:'Lucia Rasini',team:'Endpoint Sec',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t074',risk:'R-012',title:'[IAM] DocSend, ILovePDF y similares — revisar y definir gestión o descarte',owner:'IAM',team:'IAM',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t075',risk:'R-013',title:'Gen AI Baseline — proceso estándar skills + agente Security Baseline for Humans',owner:'Jota / John Mendoza / Alexis',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t076',risk:'R-013',title:'Relevamiento plataformas IA — Lunar, LangFuse, n8n, GPT, Claude, Gemini… Discovery + plan',owner:'Jota / John Mendoza',team:'DevSecOps',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t077',risk:'R-013',title:'[IAM] Alta Claude automatización — flujo de alta operativo',owner:'IAM',team:'IAM',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t078',risk:'R-013',title:'[Endpoint] POC Access IA con Trend o revisar opción JumpCloud',owner:'Lucia Rasini / Jota',team:'Endpoint Sec',type:'EPIC',due:null,prio:'P1'},
+  {id:'t079',risk:'R-015',title:'Reválida de accesos — 100% aplicaciones revalidadas (GitHub, GCP, Odoo)',owner:'Ama',team:'IAM',type:'BAU',due:'sep',prio:'P2'},
+  {id:'t080',risk:'R-015',title:'Findings IAM en GCP Security Command Center — 100% con plan de acción y seguimiento',owner:'IAM / CloudSec',team:'IAM',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t081',risk:'R-015',title:'Proyecto SOD de EY — 100% findings resueltos o mitigados, validado por EY',owner:'IAM',team:'IAM',type:'EPIC',due:'sep',prio:'P0'},
+  {id:'t082',risk:'R-015',title:'Migración e integración con Factorial — replicar automatizaciones de altas y bajas',owner:'IAM',team:'IAM',type:'EPIC',due:null,prio:'P1'},
+  {id:'t083',risk:'R-015',title:'Servicio chequeo leaks credenciales — integrar Riot, Trend y Checkpoint a IR',owner:'Alan / Die',team:'IRSec',type:'EPIC',due:'sep',prio:'P1'},
+  {id:'t084',risk:'R-015',title:'Automatización gestión accesos — quitar aprobación manual IAM en flujos',owner:'IAM',team:'IAM',type:'EPIC',due:'jul',prio:'P1'},
+  {id:'t085',risk:'R-016',title:'Brand Protection — crear monitores + SLA 100% casos atendidos',owner:'Die + Alan',team:'IRSec',type:'EPIC',due:'ago',prio:'P1'},
+  {id:'t086',risk:'R-016',title:'Awareness Seguridad a Clientes — portal de seguridad + canales oficiales + reporte fraudes',owner:'GRC / Content / Identidad',team:'GRC',type:'EPIC',due:'ago',prio:'P2'},
+  {id:'t087',risk:'R-016',title:'Integración contenido awareness en comunicaciones a clientes',owner:'GRC / Content',team:'GRC',type:'EPIC',due:'sep',prio:'P2'},
+  {id:'t088',risk:'IT-OPS',title:'SMS — procesos y manuales publicados (compras, ABM equipos, soporte L1)',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t089',risk:'IT-OPS',title:'Dashboard KPIs IT — Looker Studio: equipos, WiFi, sensores, dispositivos de red',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t090',risk:'IT-OPS',title:'Reporte gastos desglosado IT 2026 + costo por usuario calculado',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P2'},
+  {id:'t091',risk:'IT-OPS',title:'3 nuevos JSM — Legal, Identidad y Servicios Generales operativos',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t092',risk:'IT-OPS',title:'Automatizaciones de compras de proyectos → 100% sin intervención manual',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t093',risk:'IT-OPS',title:'Stack tecnológico + automatizaciones ciclo vida activos en producción con QA aprobado',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t094',risk:'IT-OPS',title:'Agente Rovo para soporte TI desde Slack — resolución de casos L1',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t095',risk:'IT-OPS',title:'Automatizar creación cuentas Apple ID para empleados desde ABM',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t096',risk:'IT-OPS',title:'IT Nacional — Barquisimeto, Lechería, Valencia: 100% estandarizadas con ITSO local',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t097',risk:'IT-OPS',title:'Oficinas Centro Letonia Caracas — 3 nuevas, IT instalado y certificado',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t098',risk:'IT-OPS',title:'Arquitectura y mantenimiento infra Letonia + certificación de red aprobada',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t099',risk:'IT-OPS',title:'Implementación Firewall en oficina Caracas — instalado y en producción',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t100',risk:'IT-OPS',title:'Sistema gestión cajas y garantías — 100% registradas y rastreables',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P2'},
+  {id:'t101',risk:'IT-OPS',title:'Adecuaciones tecnológicas Piso 9 — mudanza C-Level operativa',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t102',risk:'IT-OPS',title:'Monitoreo flota vehículos GPS — flota corporativa C-Level con monitoreo activo',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t103',risk:'IT-OPS',title:'Baja FreePBX/Maprotel — Twilio como única plataforma de telefonía',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P2'},
+  {id:'t104',risk:'IT-OPS',title:'Revisión artefactos Atlassian fuera de la organización → 0 proyectos activos externos',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t105',risk:'IT-OPS',title:'Atender auditorías internas — 100% de findings resueltos o mitigados',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t106',risk:'IT-OPS',title:'Caja fuerte piso 18 Bloomberg — adquirida e instalada',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P1'},
+  {id:'t107',risk:'IT-OPS',title:'Plan estratégico TI Fase 1 — documentada, aprobada e iniciada',owner:'IT OPS',team:'IT Ops',type:'BAU',due:'sep',prio:'P2'},
+];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+const STORE_KEY = 'cashea_q3_v3';
+const NOTES_KEY = 'cashea_q3_notes_v1';
+const TS_KEY    = 'cashea_q3_timestamps_v1';
+let state = {};
+let notes = {};
+let timestamps = {};
+let openRisks = new Set();
+let activeFilters = new Set();
+let currentView = 'dashboard';
+let riskFilter = null;
+let teamFilter = null;
+let ownerFilter = null;
+
+function loadState() {
+  try { state      = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { state = {}; }
+  try { notes      = JSON.parse(localStorage.getItem(NOTES_KEY)) || {}; } catch { notes = {}; }
+  try { timestamps = JSON.parse(localStorage.getItem(TS_KEY))    || {}; } catch { timestamps = {}; }
+  TASKS.forEach(t => { if (!state[t.id]) state[t.id] = 'todo'; });
+}
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function saveTimestamp(id) {
+  timestamps[id] = Date.now();
+  localStorage.setItem(TS_KEY, JSON.stringify(timestamps));
+}
+
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60)   return 'hace un momento';
+  if (diff < 3600) return `hace ${Math.floor(diff/60)}min`;
+  if (diff < 86400) return `hace ${Math.floor(diff/3600)}h`;
+  return `hace ${Math.floor(diff/86400)}d`;
+}
+
+function cycleStatus(id, ev) {
+  ev.stopPropagation();
+  if (state[id] === 'dismissed') return; // no ciclar si está desestimada
+  const cycle = { todo:'in_progress', in_progress:'done', done:'todo' };
+  state[id] = cycle[state[id]] || 'todo';
+  saveState(); saveTimestamp(id); renderAll();
+}
+
+function toggleDismiss(id, ev) {
+  ev.stopPropagation();
+  state[id] = state[id] === 'dismissed' ? 'todo' : 'dismissed';
+  saveState(); saveTimestamp(id); renderAll();
+}
+
+// ── OWNER FILTER ─────────────────────────────────────────
+function filterOwner(owner, ev) {
+  if (ev) ev.stopPropagation();
+  ownerFilter = ownerFilter === owner ? null : owner;
+  document.getElementById('owner-filter-chip').textContent =
+    ownerFilter ? `👤 ${ownerFilter} ✕` : '';
+  document.getElementById('owner-filter-chip').style.display =
+    ownerFilter ? 'inline-flex' : 'none';
+  renderMain();
+}
+function clearOwnerFilter() { filterOwner(null); }
+
+// ── EXPORT ───────────────────────────────────────────────
+function exportCSV() {
+  const rows = [['ID','Riesgo','Título','Owner','Equipo','Tipo','Fecha','Prioridad','Estado','Última actualización','Nota']];
+  TASKS.forEach(t => {
+    rows.push([
+      t.id, t.risk,
+      `"${t.title.replace(/"/g,'""')}"`,
+      t.owner, t.team, t.type,
+      t.due || '', t.prio || '',
+      state[t.id] || 'todo',
+      timestamps[t.id] ? new Date(timestamps[t.id]).toLocaleString('es-AR') : '',
+      `"${(notes[t.id]||'').replace(/"/g,'""')}"`
+    ]);
+  });
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob(['﻿'+csv], { type:'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `ciberseg-q3-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+function exportPDF() {
+  const w = window.open('', '_blank');
+  const statusLabel = { todo:'Pendiente', in_progress:'En progreso', done:'Completada' };
+  const rows = TASKS.map(t => `
+    <tr class="${escapeHTML(state[t.id]||'')}">
+      <td>${escapeHTML(t.risk)}</td>
+      <td>${escapeHTML(t.title)}</td>
+      <td>${escapeHTML(t.owner)}</td>
+      <td>${escapeHTML(t.prio||'')}</td>
+      <td>${escapeHTML(t.due||'')}</td>
+      <td class="st-${escapeHTML(state[t.id]||'')}">${escapeHTML(statusLabel[state[t.id]]||'')}</td>
+      <td>${timestamps[t.id] ? new Date(timestamps[t.id]).toLocaleString('es-AR') : '—'}</td>
+      <td>${escapeHTML(notes[t.id]||'')}</td>
+    </tr>`).join('');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+  <title>Ciberseg Q3 2026</title>
+  <style>
+    body{font-family:Arial,sans-serif;font-size:11px;color:#111;padding:20px}
+    h1{font-size:16px;margin-bottom:4px}p{color:#666;margin-bottom:16px;font-size:11px}
+    table{width:100%;border-collapse:collapse}
+    th{background:#111;color:#fff;padding:6px 8px;text-align:left;font-size:10px}
+    td{padding:5px 8px;border-bottom:1px solid #eee;vertical-align:top}
+    tr:nth-child(even) td{background:#f9f9f9}
+    .st-done{color:#2a9d5c;font-weight:700}
+    .st-in_progress{color:#e6a817;font-weight:700}
+    .st-todo{color:#999}
+    @media print{body{padding:0}}
+  </style></head><body>
+  <h1>Ciberseg & IT Ops — Q3 2026</h1>
+  <p>Exportado el ${new Date().toLocaleString('es-AR')}</p>
+  <table>
+    <thead><tr><th>Riesgo</th><th>Tarea</th><th>Owner</th><th>Prio</th><th>Fecha</th><th>Estado</th><th>Último update</th><th>Nota</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <script>window.onload=()=>window.print()<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+// ═══════════════════════════════════════════════════════
+//  FILTERS
+// ═══════════════════════════════════════════════════════
+function togglePill(btn, f) {
+  if (activeFilters.has(f)) { activeFilters.delete(f); btn.className = 'pill'; }
+  else { activeFilters.add(f); btn.className = `pill active-${f}`; }
+  renderMain();
+}
+
+function filtered(tasks) {
+  const q = (document.getElementById('search')?.value || '').toLowerCase();
+  return tasks.filter(t => {
+    if (ownerFilter && t.owner !== ownerFilter) return false;
+    if (q && !t.title.toLowerCase().includes(q) && !t.owner.toLowerCase().includes(q)) return false;
+    if (!activeFilters.size) return true;
+    const prioOk = !['P0','P1','P2'].some(p=>activeFilters.has(p)) || activeFilters.has(t.prio);
+    const stOk   = !['todo','in_progress','done'].some(s=>activeFilters.has(s)) || activeFilters.has(state[t.id]);
+    return prioOk && stOk;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  PACE
+// ═══════════════════════════════════════════════════════
+function paceInfo() {
+  const now  = new Date();
+  const start = new Date('2026-07-01');
+  const end   = new Date('2026-09-30');
+  const total = 92;
+  const elapsed = Math.max(0, Math.min(total, Math.ceil((now - start) / 86400000)));
+  const timePct  = Math.round(elapsed / total * 100);
+  const active   = TASKS.filter(t => state[t.id] !== 'dismissed').length;
+  const done     = TASKS.filter(t => state[t.id] === 'done').length;
+  const tasksPct = active ? Math.round(done / active * 100) : 0;
+  const diff = tasksPct - timePct;
+  let color, label;
+  if (elapsed === 0)  { color = '#777'; label = 'Q3 no iniciado'; }
+  else if (diff >= 0) { color = '#52C48A'; label = `+${diff}% adelante`; }
+  else if (diff >= -15) { color = '#FFD060'; label = `${diff}% atrás`; }
+  else                { color = '#FF6B6B'; label = `${diff}% atrás`; }
+  return { elapsed, total, timePct, tasksPct, done, color, label };
+}
+
+function renderPace() {
+  const p = paceInfo();
+  // top strip
+  document.getElementById('pace-time-fill').style.width  = p.timePct + '%';
+  const tf = document.getElementById('pace-task-fill');
+  tf.style.width      = p.tasksPct + '%';
+  tf.style.background = p.color;
+  // widget
+  const chip = document.getElementById('pw-chip');
+  chip.textContent   = p.tasksPct + '%';
+  chip.style.background = p.color + '22';
+  chip.style.color      = p.color;
+  chip.style.border     = `1px solid ${p.color}44`;
+  document.getElementById('pw-status').textContent = p.label;
+  document.getElementById('pw-status').style.color  = p.color;
+  document.getElementById('pw-day').textContent =
+    p.elapsed === 0 ? 'Q3 comienza el 1 Jul 2026' : `Día ${p.elapsed} de ${p.total} · Q3 2026`;
+  document.getElementById('pt-time').style.width  = p.timePct + '%';
+  const pt = document.getElementById('pt-tasks');
+  pt.style.width = p.tasksPct + '%'; pt.style.background = p.color;
+  document.getElementById('pl-time').textContent  = `tiempo ${p.timePct}%`;
+  document.getElementById('pl-tasks').textContent = `tareas ${p.tasksPct}%`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function progColor(pct) {
+  if (pct >= 70) return '#52C48A';
+  if (pct >= 30) return '#FFD060';
+  return '#FF6B6B';
+}
+
+function dueChip(due) {
+  const map = {
+    jul: `<span class="chip chip-jul">Jul</span>`,
+    ago: `<span class="chip chip-ago">Ago</span>`,
+    sep: `<span class="chip chip-sep">Sep</span>`,
+  };
+  return map[due] || `<span class="chip chip-none">sin fecha</span>`;
+}
+
+function taskHTML(t) {
+  const s = state[t.id] || 'todo';
+  const typeClass = { EPIC:'chip-epic', BAU:'chip-bau', API:'chip-api' }[t.type] || 'chip-bau';
+  const note = notes[t.id] || '';
+  const hasNote = note.trim().length > 0;
+  const ts = timestamps[t.id] ? `<span class="task-ts">↻ ${timeAgo(timestamps[t.id])}</span>` : '';
+  const ownerActive = ownerFilter === t.owner ? ' owner-active' : '';
+  return `
+  <div class="task-row ${s}" id="row-${t.id}">
+    <button class="status-btn ${s}" onclick="cycleStatus('${t.id}',event)" title="Cambiar estado"></button>
+    <div class="task-info">
+      <div class="task-title">${t.title}</div>
+      <div class="task-chips">
+        <span class="chip chip-owner${ownerActive}" onclick="filterOwner('${t.owner.replace(/'/g,"\\'")}',event)" title="Filtrar por este owner">◉ ${t.owner}</span>
+        ${dueChip(t.due)}
+        <span class="chip ${typeClass}">${t.type}</span>
+        ${t.prio ? `<span class="prio-chip prio-${t.prio}">${t.prio}</span>` : ''}
+        ${ts}
+      </div>
+      <div class="note-area${hasNote ? ' open' : ''}" id="note-area-${t.id}">
+        <textarea class="note-textarea" placeholder="Agregar nota…"
+          onchange="saveNote('${t.id}',this.value)"
+          oninput="saveNote('${t.id}',this.value)"
+        >${escapeHTML(note)}</textarea>
+      </div>
+    </div>
+    <button class="note-btn${hasNote ? ' has-note' : ''}" id="note-btn-${t.id}"
+      onclick="toggleNote('${t.id}',event)" title="Nota">✎</button>
+    <button class="dismiss-btn${s==='dismissed' ? ' dismissed' : ''}" id="dismiss-btn-${t.id}"
+      onclick="toggleDismiss('${t.id}',event)" title="${s==='dismissed' ? 'Reactivar tarea' : 'Desestimar para este Q'}">⊘</button>
+  </div>`;
+}
+
+function toggleNote(id, ev) {
+  ev.stopPropagation();
+  const area = document.getElementById('note-area-' + id);
+  const btn  = document.getElementById('note-btn-'  + id);
+  const open = area.classList.toggle('open');
+  if (open) area.querySelector('textarea').focus();
+}
+
+function saveNote(id, val) {
+  notes[id] = val;
+  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+  saveTimestamp(id);
+  const btn = document.getElementById('note-btn-' + id);
+  if (btn) btn.classList.toggle('has-note', val.trim().length > 0);
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIDEBAR
+// ═══════════════════════════════════════════════════════
+function renderSidebar() {
+  const groups = {critico:[], alto:[], medio:[], plan:[]};
+  RISKS.forEach(r => groups[r.sev].push(r));
+
+  ['critico','alto','medio','plan'].forEach(sev => {
+    document.getElementById('nav-'+sev).innerHTML = groups[sev].map(r => {
+      const tasks = TASKS.filter(t => t.risk === r.id);
+      const done       = tasks.filter(t => state[t.id] === 'done').length;
+      const activeCnt  = tasks.filter(t => state[t.id] !== 'dismissed').length;
+      const pct        = activeCnt ? Math.round(done / activeCnt * 100) : 0;
+      const activeClass = riskFilter === r.id ? ' active' : '';
+      return `<div class="nav-item${activeClass}" onclick="filterRisk('${r.id}')">
+        <span class="nav-dot nav-dot-${sev}"></span>
+        <span class="nav-txt">${r.id}</span>
+        <span class="nav-badge">${pct}%</span>
+      </div>`;
+    }).join('');
+  });
+
+  const teams = [...new Set(TASKS.map(t => t.team))].sort();
+  document.getElementById('nav-teams').innerHTML = teams.map(team => {
+    const tasks = TASKS.filter(t => t.team === team);
+    const done  = tasks.filter(t => state[t.id] === 'done').length;
+    const active = teamFilter === team ? ' active' : '';
+    return `<div class="nav-item${active}" onclick="filterTeam('${team}')">
+      <span style="font-size:10px;color:#555">▸</span>
+      <span class="nav-txt">${team}</span>
+      <span class="nav-badge">${done}/${tasks.length}</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════════════════
+function renderStats(tasks) {
+  const total      = tasks.length;
+  const dismissed  = tasks.filter(t => state[t.id] === 'dismissed').length;
+  const active     = total - dismissed;
+  const done       = tasks.filter(t => state[t.id] === 'done').length;
+  const ip         = tasks.filter(t => state[t.id] === 'in_progress').length;
+  const todo       = tasks.filter(t => state[t.id] === 'todo').length;
+  const p0         = tasks.filter(t => t.prio === 'P0' && state[t.id] !== 'done' && state[t.id] !== 'dismissed').length;
+  const pct        = active ? Math.round(done / active * 100) : 0;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-label">Total tareas</div><div class="stat-val yellow">${total}</div></div>
+    <div class="stat"><div class="stat-label">Completadas</div><div class="stat-val green">${done}</div><div class="stat-sub">${pct}% del total</div></div>
+    <div class="stat"><div class="stat-label">En progreso</div><div class="stat-val amber">${ip}</div></div>
+    <div class="stat"><div class="stat-label">Pendientes</div><div class="stat-val">${todo}</div></div>
+    <div class="stat"><div class="stat-label">P0 abiertas</div><div class="stat-val red">${p0}</div></div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════
+//  RISK VIEW
+// ═══════════════════════════════════════════════════════
+function renderRiskCard(r, allTasks) {
+  const tasks = filtered(allTasks.filter(t => t.risk === r.id));
+  if (!tasks.length) return '';
+  const done   = tasks.filter(t => state[t.id] === 'done').length;
+  const active = tasks.filter(t => state[t.id] !== 'dismissed').length;
+  const pct    = active ? Math.round(done / active * 100) : 0;
+  const col    = progColor(pct);
+  const sev    = r.sev === 'plan' ? 'Plan' : r.sev.charAt(0).toUpperCase() + r.sev.slice(1);
+  const isOpen = openRisks.has(r.id);
+  return `
+  <div class="risk-card${isOpen?' open':''}" id="rc-${r.id}">
+    <div class="risk-header" onclick="toggleRisk('${r.id}')">
+      <span class="risk-id ${r.sev}">${r.id}</span>
+      <span class="risk-name">${r.title}</span>
+      <div class="risk-meta">
+        <span class="risk-sev-label">${sev}</span>
+        <span class="risk-counter">${done}/${active}</span>
+        <div class="risk-prog">
+          <div class="prog-bar">
+            <div class="prog-fill" style="width:${pct}%;background:${col}"></div>
+          </div>
+          <span class="prog-pct" style="color:${col}">${pct}%</span>
+        </div>
+      </div>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="tasks-body">${tasks.map(taskHTML).join('')}</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  DASHBOARD VIEW
+// ═══════════════════════════════════════════════════════
+function renderDashboard() {
+  const p = paceInfo();
+  let html = `
+  <div style="background:#1A1A1A;border:1px solid #2D2D2D;border-radius:12px;padding:20px 24px;margin-bottom:14px">
+    <div style="font-size:11px;color:#555;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.07em">Avance global Q3 2026</div>
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:14px">
+      <span style="font-size:40px;font-weight:700;color:${p.color}">${p.tasksPct}%</span>
+      <span style="font-size:14px;color:#777">${p.done} de ${TASKS.filter(t=>state[t.id]!=='dismissed').length} tareas activas completadas</span>
+      <span style="margin-left:auto;font-size:14px;font-weight:600;color:${p.color}">${p.label}</span>
+    </div>
+    <div style="height:10px;background:#222;border-radius:5px;overflow:hidden;position:relative;margin-bottom:6px">
+      <div style="position:absolute;top:0;left:0;height:100%;width:${p.timePct}%;background:#2D2D2D;border-radius:5px"></div>
+      <div style="position:absolute;top:0;left:0;height:100%;width:${p.tasksPct}%;background:${p.color};border-radius:5px;transition:width .6s"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#444">
+      <span>▪ Tiempo transcurrido: ${p.timePct}% (Día ${p.elapsed} de ${p.total})</span>
+      <span style="color:${p.color}">▪ Tareas completadas: ${p.tasksPct}%</span>
+    </div>
+  </div>
+  <div class="dash-grid">`;
+
+  RISKS.forEach(r => {
+    const tasks = TASKS.filter(t => t.risk === r.id);
+    if (!tasks.length) return;
+    const done   = tasks.filter(t => state[t.id] === 'done').length;
+    const ip     = tasks.filter(t => state[t.id] === 'in_progress').length;
+    const active = tasks.filter(t => state[t.id] !== 'dismissed').length;
+    const pct    = active ? Math.round(done / active * 100) : 0;
+    const col  = progColor(pct);
+    html += `
+    <div class="dash-card" onclick="filterRisk('${r.id}')">
+      <div class="dash-card-top">
+        <span class="risk-id ${r.sev}" style="font-size:10px;padding:3px 8px">${r.id}</span>
+      </div>
+      <div class="dash-card-title">${r.title}</div>
+      <div class="dash-prog-bar" style="margin-top:10px">
+        <div class="dash-prog-fill" style="width:${pct}%;background:${col}"></div>
+      </div>
+      <div class="dash-meta">
+        <span>${done} done · ${ip} en prog · ${tasks.length-done-ip} pend.</span>
+        <span style="color:${col};font-weight:700">${pct}%</span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════
+//  OWNER VIEW
+// ═══════════════════════════════════════════════════════
+function renderOwnerView(tasks) {
+  const map = {};
+  filtered(tasks).forEach(t => { (map[t.owner] = map[t.owner] || []).push(t); });
+  return Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0])).map(([owner, ts]) => {
+    const done = ts.filter(t => state[t.id]==='done').length;
+    const pct  = Math.round(done / ts.length * 100);
+    const col  = progColor(pct);
+    const isOpen = openRisks.has('owner-'+owner);
+    return `
+    <div class="risk-card${isOpen?' open':''}" id="rc-owner-${owner.replace(/\W/g,'_')}">
+      <div class="risk-header" onclick="toggleRisk('owner-${owner}')">
+        <span class="risk-id plan" style="padding:4px 10px;font-size:10px">◉</span>
+        <span class="risk-name">${owner}</span>
+        <div class="risk-meta">
+          <span class="risk-counter">${done}/${ts.length}</span>
+          <div class="risk-prog">
+            <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div>
+            <span class="prog-pct" style="color:${col}">${pct}%</span>
+          </div>
+        </div>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="tasks-body">${ts.map(taskHTML).join('')}</div>
+    </div>`;
+  }).join('') || '<div class="empty">No hay tareas con los filtros aplicados.</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+//  MAIN RENDER
+// ═══════════════════════════════════════════════════════
+function visibleTasks() {
+  let tasks = TASKS;
+  if (riskFilter) tasks = tasks.filter(t => t.risk === riskFilter);
+  if (teamFilter) tasks = tasks.filter(t => t.team === teamFilter);
+  return tasks;
+}
+
+function renderMain() {
+  const tasks = visibleTasks();
+  renderStats(filtered(tasks));
+
+  const content = document.getElementById('content');
+
+  if (currentView === 'dashboard') {
+    content.innerHTML = renderDashboard(); return;
+  }
+  if (currentView === 'owner') {
+    content.innerHTML = renderOwnerView(tasks); return;
+  }
+
+  let risks = RISKS;
+  if (riskFilter) risks = risks.filter(r => r.id === riskFilter);
+  if (teamFilter) {
+    const ids = new Set(TASKS.filter(t => t.team === teamFilter).map(t => t.risk));
+    risks = risks.filter(r => ids.has(r.id));
+  }
+
+  const html = risks.map(r => renderRiskCard(r, tasks)).filter(Boolean).join('');
+  content.innerHTML = html || '<div class="empty">No hay tareas con los filtros aplicados.</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function setView(v, el) {
+  currentView = v; riskFilter = null; teamFilter = null;
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const labels = { risks:'Todos los riesgos Q3 2026', dashboard:'Dashboard Q3 2026', owner:'Por dueño' };
+  document.getElementById('toolbar-title').textContent = labels[v];
+  renderAll();
+}
+
+function filterRisk(id) {
+  currentView = 'risks'; teamFilter = null;
+  riskFilter = riskFilter === id ? null : id;
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.remove('active'));
+  if (!riskFilter) document.querySelector('.nav-item[data-view="risks"]').classList.add('active');
+  const r = RISKS.find(x => x.id === id);
+  document.getElementById('toolbar-title').textContent = riskFilter ? `${id} — ${r?.title}` : 'Todos los riesgos Q3 2026';
+  renderAll();
+}
+
+function filterTeam(team) {
+  currentView = 'risks'; riskFilter = null;
+  teamFilter = teamFilter === team ? null : team;
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.remove('active'));
+  document.getElementById('toolbar-title').textContent = teamFilter ? `Equipo: ${team}` : 'Todos los riesgos Q3 2026';
+  renderAll();
+}
+
+function toggleRisk(id) {
+  if (openRisks.has(id)) openRisks.delete(id); else openRisks.add(id);
+  renderMain();
+}
+
+function toggleExpandAll() {
+  const btn = document.getElementById('expand-btn');
+  const allIds = RISKS.map(r => r.id);
+  if (openRisks.size === 0) {
+    allIds.forEach(id => openRisks.add(id));
+    btn.textContent = '⊟ Colapsar todo';
+  } else {
+    openRisks.clear();
+    btn.textContent = '⊞ Expandir todo';
+  }
+  renderMain();
+}
+
+function toggleNavSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+function renderAll() { renderPace(); renderSidebar(); renderMain(); }
+loadState();
+renderAll();
+// auto-refresh cada 5 minutos
+setInterval(() => { loadState(); renderAll(); }, 5 * 60 * 1000);
+</script>
+</body>
+</html>

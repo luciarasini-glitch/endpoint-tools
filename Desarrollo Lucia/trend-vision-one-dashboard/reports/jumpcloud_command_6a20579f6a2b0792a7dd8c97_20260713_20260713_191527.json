@@ -1,0 +1,101 @@
+{
+  "command_id": "6a20579f6a2b0792a7dd8c97",
+  "command_name": "Install Trend Micro MAC Nuevo",
+  "command_type": "mac",
+  "target_platform": "macOS",
+  "started_at_utc": "2026-07-13T19:15:27.501719+00:00",
+  "csv_path": "reports/jumpcloud_targets_6a20579f6a2b0792a7dd8c97_20260713.csv",
+  "requested_count": 7,
+  "executed_count": 7,
+  "http_status": 200,
+  "run_response": {
+    "queueIds": [
+      "6a55394f3eb5cec3869fba53",
+      "6a55394f3eb5cec3869fba55",
+      "6a55394f3eb5cec3869fba57",
+      "6a55394f3eb5cec3869fba59",
+      "6a55394f3eb5cec3869fba5b",
+      "6a55394f3eb5cec3869fba5d",
+      "6a55394f3eb5cec3869fba5f"
+    ],
+    "workflowInstanceId": "6a55394f3eb5cec3869fba50"
+  },
+  "systems": [
+    {
+      "requested_hostname": "CASHEA-MAC-C9V0CN2X16",
+      "system_id": "6a0f017807aed85567af3adc",
+      "display_name": "CASHEA-MAC-C9V0CN2X16",
+      "hostname": "CASHEA-MAC-C9V0CN2X16",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-06-12T21:05:11.000Z",
+      "agent_version": "2.131.3"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-CXX9097LR0",
+      "system_id": "6967c363fdb3c9fdcadefe7d",
+      "display_name": "CASHEA-MAC-CXX9097LR0",
+      "hostname": "CASHEA-MAC-CXX9097LR0",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-06-13T03:08:37.000Z",
+      "agent_version": "2.131.3"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-DVW42WNN7N",
+      "system_id": "691b9dabb024b4801bbf50f6",
+      "display_name": "CASHEA-MAC-DVW42WNN7N",
+      "hostname": "CASHEA-MAC-DVW42WNN7N",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-06-26T15:57:50.232Z",
+      "agent_version": "2.140.1"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-H3G04VKXWK",
+      "system_id": "68e820c0ffed3e44000241af",
+      "display_name": "CASHEA-MAC-H3G04VKXWK",
+      "hostname": "CASHEA-MAC-H3G04VKXWK",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-06-05T00:07:35.000Z",
+      "agent_version": "2.129.1"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-H7HC96HW4M",
+      "system_id": "69ab3f93cc604b7fc1ee06fa",
+      "display_name": "Laurences-MacBook-Air.local",
+      "hostname": "CASHEA-MAC-H7HC96HW4M",
+      "os": "Mac OS X",
+      "active": true,
+      "last_contact": "2026-07-13T19:11:02.000Z",
+      "agent_version": "2.144.2"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-JJKCQ24M7R",
+      "system_id": "68ded9c7ea792b6668881864",
+      "display_name": "MacBook-Air-de-Sofia.local",
+      "hostname": "CASHEA-MAC-JJKCQ24M7R",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-05-26T07:06:51.000Z",
+      "agent_version": "2.127.0"
+    },
+    {
+      "requested_hostname": "CASHEA-MAC-LY5WCMX6QY",
+      "system_id": "69c54132001b008f496efc91",
+      "display_name": "MacBook-Pro-de-Krisbel.local",
+      "hostname": "CASHEA-MAC-LY5WCMX6QY",
+      "os": "Mac OS X",
+      "active": false,
+      "last_contact": "2026-05-28T02:20:43.000Z",
+      "agent_version": "2.127.0"
+    }
+  ],
+  "skipped": {
+    "missing": [],
+    "duplicates": [],
+    "nonwindows": [],
+    "platform_mismatches": []
+  }
+}

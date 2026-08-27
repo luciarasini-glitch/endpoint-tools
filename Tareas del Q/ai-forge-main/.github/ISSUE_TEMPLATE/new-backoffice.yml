@@ -1,0 +1,126 @@
+name: 🖥️ Nuevo backoffice
+description: Solicitá la creación de un backoffice nuevo (dashboard, herramienta interna con UI)
+title: "[NEW BACKOFFICE] "
+labels: ["new-backoffice", "pending-approval"]
+projects: []
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔨 Crear un backoffice nuevo
+
+        Este formulario crea un repo nuevo desde [`bo-template`](https://github.com/cashea-bnpl/bo-template) con JumpCloud SSO, Next.js y rules de seguridad pre-configurados.
+
+        **Antes de continuar:**
+        - El backoffice es para uso **interno** (empleados con cuenta de Cashea)
+        - Si la herramienta va a ser usada por clientes externos, NO uses este template — abrí un Issue de "Nuevo Servicio" con stack Next.js
+        - Lee [docs/for-non-technical.md](../blob/main/docs/for-non-technical.md) si no sos técnico
+
+  - type: input
+    id: bo-name
+    attributes:
+      label: Nombre del backoffice
+      description: |
+        Nombre corto, lowercase, separado con guiones. Va a ser el nombre del repo.
+        Ej: `risk-review`, `kyc-ops`, `billing-admin`
+      placeholder: my-backoffice
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: ¿Para qué se usa este backoffice?
+      description: ¿Quién lo va a usar? ¿Qué van a hacer con él?
+      placeholder: |
+        Lo usa el equipo de riesgo para revisar solicitudes de crédito que el scoring automático marca como dudosas.
+        Permiten aprobar/rechazar manualmente y agregar comentarios.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Equipo responsable
+      options:
+        - platform
+        - engineering
+        - finance
+        - security
+        - data
+        - product
+    validations:
+      required: true
+
+  - type: dropdown
+    id: users
+    attributes:
+      label: ¿Quiénes son los usuarios?
+      description: Esto define los grupos de JumpCloud que tienen acceso
+      options:
+        - Un equipo específico (especificar abajo)
+        - Múltiples equipos
+        - Toda la organización
+    validations:
+      required: true
+
+  - type: input
+    id: user-groups
+    attributes:
+      label: Grupos de JumpCloud con acceso
+      description: Nombres de los grupos. Separados por coma.
+      placeholder: cashea-risk-team, cashea-risk-leads
+
+  - type: dropdown
+    id: data-classification
+    attributes:
+      label: Clasificación de los datos que va a mostrar
+      description: |
+        Según [Política de Clasificación](https://docs.google.com/document/d/1RVCRTTo7Bqi32qvp3t_ezRTAJoDlruVXEfMCtNGeWZo).
+        Un backoffice de riesgo que ve PANs cae en Restringido.
+      options:
+        - 🟢 Público (PUB)
+        - 🟡 Interno (FIN-AGG, TECH-NP)
+        - 🟠 Confidencial (PII-I, IP-CORE, REG-RPT, EMP-DATA, OPS-LOG)
+        - 🔴 Restringido (PII-D, FIN-IND, SEC-PRD) — requiere review de AppSec
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: visualizations
+    attributes:
+      label: ¿Va a visualizar alguno de estos?
+      description: Si marcás alguno, hay reglas de enmascaramiento que aplican (Política de Protección sección 7.3.3)
+      options:
+        - label: PAN (números de tarjeta) — se truncan a últimos 4
+        - label: PII-D (CDI, RIF, nombres) — se seudonimizan
+        - label: PII-I (email, teléfono) — se enmascaran sin rol explícito
+        - label: Datos financieros individuales — enmascaramiento según rol
+        - label: Ninguno de los anteriores
+
+  - type: input
+    id: data-sources
+    attributes:
+      label: Servicios/APIs que va a consumir
+      description: De dónde toma los datos
+      placeholder: ms-risk-scoring, BigQuery (risk_dashboard views), Cloud SQL (prod-risk)
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Contexto adicional
+      placeholder: (opcional)
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Confirmo que es solo para uso interno (empleados con cuenta JumpCloud)
+          required: true
+        - label: Entiendo que las sesiones se manejan con HttpOnly cookies (nunca con tokens en localStorage)
+          required: true
+        - label: Si visualiza datos sensibles, espero un review de AppSec antes de aprobación
+          required: true

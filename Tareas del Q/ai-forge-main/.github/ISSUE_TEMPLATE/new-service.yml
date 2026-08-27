@@ -1,0 +1,134 @@
+name: ⚙️ Nuevo microservicio
+description: Solicitá la creación de un microservicio nuevo (API, integración, servicio sin UI)
+title: "[NEW SERVICE] "
+labels: ["new-service", "pending-approval"]
+projects: []
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔨 Crear un microservicio nuevo
+
+        Este formulario crea un repo nuevo desde [`ms-template`](https://github.com/cashea-bnpl/ms-template) con todos los controles de seguridad pre-configurados.
+
+        **Antes de continuar:**
+        - Tené claro qué hace el servicio y qué datos toca
+        - Si toca datos **Restringidos** (PII-D, FIN-IND, SEC-PRD), AppSec va a revisar más en detalle
+        - Lee [docs/for-non-technical.md](../blob/main/docs/for-non-technical.md) si no sos técnico
+
+  - type: input
+    id: service-name
+    attributes:
+      label: Nombre del servicio
+      description: |
+        Nombre corto, lowercase, separado con guiones. Va a ser el nombre del repo.
+        Ej: `risk-scoring`, `billing-invoices`, `kyc-validator`
+      placeholder: my-service
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: ¿Qué hace este servicio?
+      description: Descripción corta. ¿Qué problema resuelve? ¿Quién lo consume?
+      placeholder: |
+        Calcula scoring crediticio en tiempo real. Lo consume el backoffice de aprobación de créditos.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Equipo responsable
+      description: Equipo que va a ser dueño del servicio (Data Owner según Política de Clasificación)
+      options:
+        - platform
+        - engineering
+        - finance
+        - security
+        - data
+        - product
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stack
+    attributes:
+      label: Stack
+      description: NestJS es el default. FastAPI solo si hay razón fuerte (ej. integración con modelos ML).
+      options:
+        - NestJS + TypeScript (default)
+        - FastAPI + Python (justificar abajo)
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: data-classification
+    attributes:
+      label: Clasificación de datos que va a manejar
+      description: |
+        Según [Política de Clasificación](https://docs.google.com/document/d/1RVCRTTo7Bqi32qvp3t_ezRTAJoDlruVXEfMCtNGeWZo).
+        Si dudás → asumí Confidencial y AppSec ajusta.
+      options:
+        - 🟢 Público (PUB)
+        - 🟡 Interno (FIN-AGG, TECH-NP)
+        - 🟠 Confidencial (PII-I, IP-CORE, REG-RPT, EMP-DATA, OPS-LOG)
+        - 🔴 Restringido (PII-D, FIN-IND, SEC-PRD) — requiere review de AppSec
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: sensitive-data
+    attributes:
+      label: ¿Va a tocar alguna de estas categorías sensibles?
+      description: Marcá todas las que apliquen. Triggerea controles adicionales.
+      options:
+        - label: PII-D (CDI, RIF, nombres, fechas de nacimiento, selfies KYC)
+        - label: FIN-IND (PAN, saldos, transacciones, scoring)
+        - label: SEC-PRD (API keys, tokens, secretos productivos)
+        - label: PII-I (email, teléfono, dirección, IP)
+        - label: REG-RPT (datos regulatorios reportables)
+        - label: EMP-DATA (datos de empleados)
+        - label: Ninguna de las anteriores
+
+  - type: dropdown
+    id: environments
+    attributes:
+      label: Entornos requeridos
+      description: Casi siempre los 3. Marcá si tu caso es distinto.
+      options:
+        - dev + stg + prd (default)
+        - dev + prd
+        - solo sandbox
+    validations:
+      required: true
+
+  - type: input
+    id: dependencies
+    attributes:
+      label: Servicios externos que consume
+      description: APIs, bases de datos, queues, etc. Lista separada por comas.
+      placeholder: BigQuery (dataset finance_*), Cloud SQL (prod-billing), Pub/Sub (risk-events)
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Contexto adicional
+      description: Algo más que AppSec debería saber. Ej. compliance, fechas límite, dependencias, etc.
+      placeholder: (opcional)
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Leí la [Política de Uso de IA para Código](https://www.notion.so/cashea/Politica-Uso-IA-Codigo)
+          required: true
+        - label: Entiendo que el repo va a tener los rules de seguridad inyectados y que el código generado tiene que pasar por GHAS antes de mergearse
+          required: true
+        - label: Si toca datos Restringidos, espero un review de AppSec antes de aprobación
+          required: true
